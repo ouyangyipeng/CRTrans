@@ -4,8 +4,9 @@
 #![allow(non_upper_case_globals)]
 #![allow(unused_assignments)]
 #![allow(unused_mut)]
+#![feature(extern_types)]
 
 
 pub mod src {
-pub mod quick_sort;
+pub mod json_parser;
 } // mod src

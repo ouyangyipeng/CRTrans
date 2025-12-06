@@ -10,7 +10,7 @@ from crtrans.logging_setup import setup_logging
 from crtrans.c2rust_wrapper import write_compile_commands, run_c2rust
 from crtrans.c_parser import CFeatureExtractor, topo_sort, Feature
 from crtrans.info_builder import build_info
-from crtrans.prompting import load_prompt
+from crtrans.prompting import load_prompt, call_deepseek
 from crtrans.translator import generate_signatures, translate_function, assemble_rust
 from crtrans.rust_checker import compile_rust
 from crtrans.runner import run_binary, compare_outputs
@@ -37,6 +37,25 @@ def pick_static_hint(output_dir: Path) -> str:
     if not rs_files:
         return ""
     return rs_files[0].read_text(encoding="utf-8")
+
+
+def write_final_report(c_path: Path, rust_path: Path, prompt_dir: Path, api_key: str | None, work_dir: Path) -> None:
+    prompt_file = prompt_dir / "final_judge_prompt.txt"
+    prompt = load_prompt(prompt_file)
+    c_code = c_path.read_text(encoding="utf-8")
+    rust_code = rust_path.read_text(encoding="utf-8")
+    messages = [
+        {"role": "system", "content": "You are a precise C/Rust equivalence reviewer."},
+        {
+            "role": "user",
+            "content": prompt.format(c_name=c_path.name, c_code=c_code, rust_name=rust_path.name, rust_code=rust_code),
+        },
+    ]
+    resp = call_deepseek(messages, api_key=api_key, max_tokens=2048)
+    report_path = work_dir / f"report_{c_path.stem}.md"
+    work_dir.mkdir(parents=True, exist_ok=True)
+    report_path.write_text(resp, encoding="utf-8")
+    logger.info("Wrote final equivalence report to %s", report_path)
 
 
 def main() -> None:
@@ -153,11 +172,33 @@ def main() -> None:
     else:
         logger.info("Outputs match for provided samples")
 
+    final_code = rust_out_path.read_text(encoding="utf-8")
     final_target = Path("rust") / c_path.with_suffix(".rs").name
     final_target.parent.mkdir(parents=True, exist_ok=True)
-    final_target.write_text(assembled, encoding="utf-8")
+    final_target.write_text(final_code, encoding="utf-8")
     logger.info("Saved final Rust to %s", final_target)
+
+    write_final_report(c_path, final_target, prompt_dir, args.api_key, work_dir)
 
 
 if __name__ == "__main__":
     main()
+
+
+def write_final_report(c_path: Path, rust_path: Path, prompt_dir: Path, api_key: str | None, work_dir: Path) -> None:
+    prompt_file = prompt_dir / "final_judge_prompt.txt"
+    prompt = load_prompt(prompt_file)
+    c_code = c_path.read_text(encoding="utf-8")
+    rust_code = rust_path.read_text(encoding="utf-8")
+    messages = [
+        {"role": "system", "content": "You are a precise C/Rust equivalence reviewer."},
+        {
+            "role": "user",
+            "content": prompt.format(c_name=c_path.name, c_code=c_code, rust_name=rust_path.name, rust_code=rust_code),
+        },
+    ]
+    resp = call_deepseek(messages, api_key=api_key, max_tokens=2048)
+    report_path = work_dir / f"report_{c_path.stem}.md"
+    work_dir.mkdir(parents=True, exist_ok=True)
+    report_path.write_text(resp, encoding="utf-8")
+    logger.info("Wrote final equivalence report to %s", report_path)

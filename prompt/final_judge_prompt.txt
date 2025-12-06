@@ -1,0 +1,14 @@
+Given a C source file and its Rust translation, provide a detailed equivalence assessment.
+Output a Markdown report with sections:
+- Summary (overall equivalence verdict and confidence 0-100)
+- Functional Equivalence (whether outputs and side effects should match; note any divergences)
+- UB/Memory Safety Notes (potential undefined behavior in C and whether Rust mirrors/avoids it)
+- API/IO Differences (stdin/stdout formatting, exit codes)
+- Type/Overflow Considerations
+- Suggestions (up to 3 concise fixes if not equivalent)
+
+C ({c_name}):
+{c_code}
+
+Rust ({rust_name}):
+{rust_code}

@@ -941,3 +941,504 @@ error: aborting due to 18 previous errors
 2025-12-06 20:17:23 [INFO] crtrans.rust_checker - Compiling Rust: rustc --edition 2021 rust/translated.rs -o rust/translated
 2025-12-06 20:17:23 [INFO] __main__ - Outputs match for provided samples
 2025-12-06 20:17:23 [INFO] __main__ - Saved final Rust to rust/quick_sort.rs
+2025-12-06 20:52:20 [INFO] __main__ - Using C file: /work/CRTrans/C/bubble_sort.c
+2025-12-06 20:52:20 [INFO] crtrans.info_builder - Compiling C: gcc -O0 /work/CRTrans/C/bubble_sort.c -o temp/c_binary
+2025-12-06 20:52:21 [INFO] crtrans.prompting - Calling DeepSeek with 2490 tokens of messages
+2025-12-06 20:52:24 [INFO] crtrans.info_builder - Wrote info.md to temp/info.md
+2025-12-06 20:52:24 [INFO] crtrans.c2rust_wrapper - Wrote compile_commands.json at temp/compile_commands.json
+2025-12-06 20:52:24 [INFO] crtrans.c2rust_wrapper - Running c2rust: c2rust transpile --emit-build-files --output-dir temp/c2rust temp/compile_commands.json
+2025-12-06 20:52:25 [INFO] crtrans.prompting - Calling DeepSeek with 388 tokens of messages
+2025-12-06 20:52:28 [INFO] crtrans.prompting - Calling DeepSeek with 5421 tokens of messages
+2025-12-06 20:52:31 [INFO] crtrans.prompting - Calling DeepSeek with 359 tokens of messages
+2025-12-06 20:52:35 [INFO] crtrans.prompting - Calling DeepSeek with 5411 tokens of messages
+2025-12-06 20:52:37 [INFO] crtrans.prompting - Calling DeepSeek with 1113 tokens of messages
+2025-12-06 20:52:38 [INFO] crtrans.prompting - Calling DeepSeek with 6196 tokens of messages
+2025-12-06 20:52:43 [INFO] crtrans.prompting - Calling DeepSeek with 608 tokens of messages
+2025-12-06 20:52:46 [INFO] crtrans.prompting - Calling DeepSeek with 5670 tokens of messages
+2025-12-06 20:52:52 [INFO] crtrans.prompting - Calling DeepSeek with 5432 tokens of messages
+2025-12-06 20:53:00 [INFO] __main__ - Wrote assembled Rust to rust/translated.rs
+2025-12-06 20:53:00 [INFO] crtrans.rust_checker - Compiling Rust: rustc --edition 2021 rust/translated.rs -o rust/translated
+2025-12-06 20:53:00 [ERROR] crtrans.rust_checker - rustc failed:
+error[E0433]: failed to resolve: use of unresolved module or unlinked crate `rand`
+  --> rust/translated.rs:38:19
+   |
+38 |         arr[i] = (rand::random::<u32>() % 100) as i32;
+   |                   ^^^^ use of unresolved module or unlinked crate `rand`
+   |
+   = help: you might be missing a crate named `rand`
+
+error[E0499]: cannot borrow `arr[_]` as mutable more than once at a time
+  --> rust/translated.rs:21:35
+   |
+21 |                 swap(&mut arr[j], &mut arr[j + 1]);
+   |                 ---- -----------  ^^^^^^^^^^^^^^^ second mutable borrow occurs here
+   |                 |    |
+   |                 |    first mutable borrow occurs here
+   |                 first borrow later used by call
+   |
+   = help: use `.split_at_mut(position)` to obtain two mutable non-overlapping sub-slices
+
+warning: unused variable: `seed`
+  --> rust/translated.rs:53:9
+   |
+53 |     let seed = std::time::SystemTime::now()
+   |         ^^^^ help: if this is intentional, prefix it with an underscore: `_seed`
+   |
+   = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+error: aborting due to 2 previous errors; 1 warning emitted
+
+Some errors have detailed explanations: E0433, E0499.
+For more information about an error, try `rustc --explain E0433`.
+
+2025-12-06 20:53:00 [WARNING] __main__ - rustc failed; invoking LLM fix iteration 1
+2025-12-06 20:53:00 [INFO] crtrans.prompting - Calling DeepSeek with 3476 tokens of messages
+2025-12-06 20:53:14 [INFO] crtrans.rust_checker - Compiling Rust: rustc --edition 2021 rust/translated.rs -o rust/translated
+2025-12-06 20:53:14 [ERROR] crtrans.rust_checker - rustc failed:
+error[E0433]: failed to resolve: use of unresolved module or unlinked crate `fastrand`
+  --> rust/translated.rs:39:19
+   |
+39 |         arr[i] = (fastrand::u32(..100)) as i32;
+   |                   ^^^^^^^^ use of unresolved module or unlinked crate `fastrand`
+   |
+   = help: you might be missing a crate named `fastrand`
+
+error: aborting due to 1 previous error
+
+For more information about this error, try `rustc --explain E0433`.
+
+2025-12-06 20:53:14 [WARNING] __main__ - rustc failed; invoking LLM fix iteration 2
+2025-12-06 20:53:14 [INFO] crtrans.prompting - Calling DeepSeek with 2336 tokens of messages
+2025-12-06 20:53:30 [INFO] crtrans.rust_checker - Compiling Rust: rustc --edition 2021 rust/translated.rs -o rust/translated
+2025-12-06 20:53:30 [ERROR] crtrans.rust_checker - rustc failed:
+error[E0433]: failed to resolve: use of unresolved module or unlinked crate `rand`
+  --> rust/translated.rs:39:19
+   |
+39 |         arr[i] = (rand::random::<u32>() % 100) as i32;
+   |                   ^^^^ use of unresolved module or unlinked crate `rand`
+   |
+   = help: you might be missing a crate named `rand`
+
+error: aborting due to 1 previous error
+
+For more information about this error, try `rustc --explain E0433`.
+
+2025-12-06 20:53:30 [WARNING] __main__ - rustc failed; invoking LLM fix iteration 3
+2025-12-06 20:53:30 [INFO] crtrans.prompting - Calling DeepSeek with 2334 tokens of messages
+2025-12-06 20:53:44 [INFO] crtrans.rust_checker - Compiling Rust: rustc --edition 2021 rust/translated.rs -o rust/translated
+2025-12-06 20:53:44 [ERROR] crtrans.rust_checker - rustc failed:
+error[E0433]: failed to resolve: use of unresolved module or unlinked crate `fastrand`
+  --> rust/translated.rs:39:19
+   |
+39 |         arr[i] = (fastrand::u32(..100)) as i32;
+   |                   ^^^^^^^^ use of unresolved module or unlinked crate `fastrand`
+   |
+   = help: you might be missing a crate named `fastrand`
+
+error[E0433]: failed to resolve: use of unresolved module or unlinked crate `fastrand`
+  --> rust/translated.rs:54:5
+   |
+54 |     fastrand::seed(
+   |     ^^^^^^^^ use of unresolved module or unlinked crate `fastrand`
+   |
+   = help: you might be missing a crate named `fastrand`
+
+error: aborting due to 2 previous errors
+
+For more information about this error, try `rustc --explain E0433`.
+
+2025-12-06 20:53:44 [ERROR] __main__ - Rust compilation failed after fixes; inspect rust/translated.rs
+2025-12-06 20:54:21 [INFO] __main__ - Using C file: /work/CRTrans/C/bubble_sort.c
+2025-12-06 20:54:21 [INFO] crtrans.info_builder - Compiling C: gcc -O0 /work/CRTrans/C/bubble_sort.c -o temp/c_binary
+2025-12-06 20:54:21 [INFO] crtrans.prompting - Calling DeepSeek with 2490 tokens of messages
+2025-12-06 20:54:26 [INFO] crtrans.info_builder - Wrote info.md to temp/info.md
+2025-12-06 20:54:26 [INFO] crtrans.c2rust_wrapper - Wrote compile_commands.json at temp/compile_commands.json
+2025-12-06 20:54:26 [INFO] crtrans.c2rust_wrapper - Running c2rust: c2rust transpile --emit-build-files --output-dir temp/c2rust temp/compile_commands.json
+2025-12-06 20:54:26 [INFO] crtrans.prompting - Calling DeepSeek with 388 tokens of messages
+2025-12-06 20:54:29 [INFO] crtrans.prompting - Calling DeepSeek with 5421 tokens of messages
+2025-12-06 20:54:32 [INFO] crtrans.prompting - Calling DeepSeek with 359 tokens of messages
+2025-12-06 20:54:35 [INFO] crtrans.prompting - Calling DeepSeek with 5411 tokens of messages
+2025-12-06 20:54:38 [INFO] crtrans.prompting - Calling DeepSeek with 1113 tokens of messages
+2025-12-06 20:54:41 [INFO] crtrans.prompting - Calling DeepSeek with 6196 tokens of messages
+2025-12-06 20:54:55 [INFO] crtrans.prompting - Calling DeepSeek with 608 tokens of messages
+2025-12-06 20:54:58 [INFO] crtrans.prompting - Calling DeepSeek with 5670 tokens of messages
+2025-12-06 20:55:05 [INFO] crtrans.prompting - Calling DeepSeek with 5432 tokens of messages
+2025-12-06 20:55:27 [INFO] __main__ - Wrote assembled Rust to rust/translated.rs
+2025-12-06 20:55:27 [INFO] crtrans.rust_checker - Compiling Rust: rustc --edition 2021 rust/translated.rs -o rust/translated
+2025-12-06 20:55:27 [ERROR] crtrans.rust_checker - rustc failed:
+error[E0433]: failed to resolve: function `rand` is not a crate or module
+  --> rust/translated.rs:39:19
+   |
+39 |         arr[i] = (rand::random::<u32>() % 100) as i32;
+   |                   ^^^^ function `rand` is not a crate or module
+
+error: aborting due to 1 previous error
+
+For more information about this error, try `rustc --explain E0433`.
+
+2025-12-06 20:55:27 [WARNING] __main__ - rustc failed; invoking LLM fix iteration 1
+2025-12-06 20:55:27 [INFO] crtrans.prompting - Calling DeepSeek with 3250 tokens of messages
+2025-12-06 20:55:47 [INFO] crtrans.rust_checker - Compiling Rust: rustc --edition 2021 rust/translated.rs -o rust/translated
+2025-12-06 20:55:48 [INFO] __main__ - Outputs match for provided samples
+2025-12-06 20:55:48 [INFO] __main__ - Saved final Rust to rust/bubble_sort.rs
+2025-12-06 20:55:48 [INFO] crtrans.prompting - Calling DeepSeek with 4833 tokens of messages
+2025-12-06 20:56:18 [INFO] __main__ - Wrote final equivalence report to temp/report_bubble_sort.md
+2025-12-06 20:58:25 [INFO] __main__ - Using C file: /work/CRTrans/C/insertion_sort.c
+2025-12-06 20:58:25 [INFO] crtrans.info_builder - Compiling C: gcc -O0 /work/CRTrans/C/insertion_sort.c -o temp/c_binary
+2025-12-06 20:58:25 [INFO] crtrans.prompting - Calling DeepSeek with 1609 tokens of messages
+2025-12-06 20:58:29 [INFO] crtrans.info_builder - Wrote info.md to temp/info.md
+2025-12-06 20:58:29 [INFO] crtrans.c2rust_wrapper - Wrote compile_commands.json at temp/compile_commands.json
+2025-12-06 20:58:29 [INFO] crtrans.c2rust_wrapper - Running c2rust: c2rust transpile --emit-build-files --output-dir temp/c2rust temp/compile_commands.json
+2025-12-06 20:58:29 [INFO] crtrans.prompting - Calling DeepSeek with 646 tokens of messages
+2025-12-06 20:58:32 [INFO] crtrans.prompting - Calling DeepSeek with 4742 tokens of messages
+2025-12-06 20:58:38 [INFO] crtrans.prompting - Calling DeepSeek with 690 tokens of messages
+2025-12-06 20:58:38 [INFO] crtrans.prompting - Calling DeepSeek with 4807 tokens of messages
+2025-12-06 20:58:45 [INFO] crtrans.prompting - Calling DeepSeek with 4484 tokens of messages
+2025-12-06 20:58:58 [INFO] __main__ - Wrote assembled Rust to rust/translated.rs
+2025-12-06 20:58:58 [INFO] crtrans.rust_checker - Compiling Rust: rustc --edition 2021 rust/translated.rs -o rust/translated
+2025-12-06 20:58:58 [ERROR] crtrans.rust_checker - rustc failed:
+error[E0432]: unresolved import `rand::Rng`
+  --> rust/translated.rs:18:9
+   |
+18 |     use rand::Rng;
+   |         ^^^^^^---
+   |         |     |
+   |         |     help: a similar name exists in the module: `RNG`
+   |         no `Rng` in `rand`
+
+error[E0425]: cannot find function `thread_rng` in module `rand`
+  --> rust/translated.rs:20:25
+   |
+20 |     let mut rng = rand::thread_rng();
+   |                         ^^^^^^^^^^ not found in `rand`
+
+warning: unused import: `std::sync::OnceLock`
+  --> rust/translated.rs:58:9
+   |
+58 |     use std::sync::OnceLock;
+   |         ^^^^^^^^^^^^^^^^^^^
+   |
+   = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+error: aborting due to 2 previous errors; 1 warning emitted
+
+Some errors have detailed explanations: E0425, E0432.
+For more information about an error, try `rustc --explain E0425`.
+
+2025-12-06 20:58:58 [WARNING] __main__ - rustc failed; invoking LLM fix iteration 1
+2025-12-06 20:58:58 [INFO] crtrans.prompting - Calling DeepSeek with 3242 tokens of messages
+2025-12-06 20:59:24 [INFO] crtrans.rust_checker - Compiling Rust: rustc --edition 2021 rust/translated.rs -o rust/translated
+2025-12-06 20:59:24 [ERROR] crtrans.rust_checker - rustc failed:
+error: invalid path separator in function definition
+  --> rust/translated.rs:77:23
+   |
+77 |     pub fn RandomState::new() -> RandomState {
+   |                       ^^
+   |
+help: remove invalid path separator
+   |
+77 -     pub fn RandomState::new() -> RandomState {
+77 +     pub fn RandomStatenew() -> RandomState {
+   |
+
+error: missing parameters for function definition
+  --> rust/translated.rs:77:25
+   |
+77 |     pub fn RandomState::new() -> RandomState {
+   |                         ^
+   |
+help: add a parameter list
+   |
+77 |     pub fn RandomState::()new() -> RandomState {
+   |                         ++
+
+error: expected one of `->`, `<`, `where`, or `{`, found `new`
+  --> rust/translated.rs:77:25
+   |
+77 |     pub fn RandomState::new() -> RandomState {
+   |                         ^^^ expected one of `->`, `<`, `where`, or `{`
+
+error: aborting due to 3 previous errors
+
+
+2025-12-06 20:59:24 [WARNING] __main__ - rustc failed; invoking LLM fix iteration 2
+2025-12-06 20:59:24 [INFO] crtrans.prompting - Calling DeepSeek with 3367 tokens of messages
+2025-12-06 20:59:43 [INFO] crtrans.rust_checker - Compiling Rust: rustc --edition 2021 rust/translated.rs -o rust/translated
+2025-12-06 20:59:43 [ERROR] crtrans.rust_checker - rustc failed:
+error[E0603]: struct import `RandomState` is private
+   --> rust/translated.rs:18:25
+    |
+ 18 |     let mut rng = rand::RandomState::new();
+    |                         ^^^^^^^^^^^ private struct import
+    |
+note: the struct import `RandomState` is defined here...
+   --> rust/translated.rs:56:9
+    |
+ 56 |     use std::collections::hash_map::RandomState;
+    |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+note: ...and refers to the struct `RandomState` which is defined here
+   --> /root/.rustup/toolchains/stable-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/std/src/collections/mod.rs:451:13
+    |
+451 |     pub use crate::hash::random::RandomState;
+    |             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ you could import this directly
+help: consider importing this struct instead
+    |
+ 18 -     let mut rng = rand::RandomState::new();
+ 18 +     let mut rng = std::hash::RandomState::new();
+    |
+help: import `RandomState` through the re-export
+    |
+ 18 -     let mut rng = rand::RandomState::new();
+ 18 +     let mut rng = collections::hash_map::RandomState();
+    |
+
+error[E0599]: no method named `abs` found for type `usize` in the current scope
+  --> rust/translated.rs:19:40
+   |
+19 |     let size = (rand::rand() as usize).abs() % 500;
+   |                                        ^^^ method not found in `usize`
+   |
+  ::: /root/.rustup/toolchains/stable-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/compiler-builtins/compiler-builtins/src/math/../../../libm/src/math/support/int_traits.rs:79:8
+   |
+79 |     fn abs(self) -> Self;
+   |        --- the method is available for `usize` here
+
+error: aborting due to 2 previous errors
+
+Some errors have detailed explanations: E0599, E0603.
+For more information about an error, try `rustc --explain E0599`.
+
+2025-12-06 20:59:43 [WARNING] __main__ - rustc failed; invoking LLM fix iteration 3
+2025-12-06 20:59:43 [INFO] crtrans.prompting - Calling DeepSeek with 4263 tokens of messages
+2025-12-06 21:00:04 [INFO] crtrans.rust_checker - Compiling Rust: rustc --edition 2021 rust/translated.rs -o rust/translated
+2025-12-06 21:00:04 [INFO] __main__ - Outputs match for provided samples
+2025-12-06 21:00:04 [INFO] __main__ - Saved final Rust to rust/insertion_sort.rs
+2025-12-06 21:00:04 [INFO] crtrans.prompting - Calling DeepSeek with 3850 tokens of messages
+2025-12-06 21:00:39 [INFO] __main__ - Wrote final equivalence report to temp/report_insertion_sort.md
+2025-12-06 21:11:48 [INFO] __main__ - Using C file: /work/CRTrans/C/json_parser.c
+2025-12-06 21:11:48 [INFO] crtrans.info_builder - Compiling C: gcc -O0 /work/CRTrans/C/json_parser.c -o temp/c_binary
+2025-12-06 21:11:49 [INFO] crtrans.prompting - Calling DeepSeek with 3023 tokens of messages
+2025-12-06 21:11:54 [INFO] crtrans.info_builder - Wrote info.md to temp/info.md
+2025-12-06 21:11:54 [INFO] crtrans.c2rust_wrapper - Wrote compile_commands.json at temp/compile_commands.json
+2025-12-06 21:11:54 [INFO] crtrans.c2rust_wrapper - Running c2rust: c2rust transpile --emit-build-files --output-dir temp/c2rust temp/compile_commands.json
+2025-12-06 21:11:55 [INFO] crtrans.prompting - Calling DeepSeek with 317 tokens of messages
+2025-12-06 21:11:58 [INFO] crtrans.prompting - Calling DeepSeek with 10947 tokens of messages
+2025-12-06 21:12:00 [INFO] crtrans.prompting - Calling DeepSeek with 318 tokens of messages
+2025-12-06 21:12:07 [INFO] crtrans.prompting - Calling DeepSeek with 10936 tokens of messages
+2025-12-06 21:12:09 [INFO] crtrans.prompting - Calling DeepSeek with 284 tokens of messages
+2025-12-06 21:12:11 [INFO] crtrans.prompting - Calling DeepSeek with 10912 tokens of messages
+2025-12-06 21:12:30 [INFO] crtrans.prompting - Calling DeepSeek with 633 tokens of messages
+2025-12-06 21:12:38 [INFO] crtrans.prompting - Calling DeepSeek with 11380 tokens of messages
+2025-12-06 21:12:48 [INFO] crtrans.prompting - Calling DeepSeek with 300 tokens of messages
+2025-12-06 21:12:52 [INFO] crtrans.prompting - Calling DeepSeek with 11020 tokens of messages
+2025-12-06 21:13:09 [INFO] crtrans.prompting - Calling DeepSeek with 529 tokens of messages
+2025-12-06 21:13:17 [INFO] crtrans.prompting - Calling DeepSeek with 11234 tokens of messages
+2025-12-06 21:13:26 [INFO] crtrans.prompting - Calling DeepSeek with 550 tokens of messages
+2025-12-06 21:13:28 [INFO] crtrans.prompting - Calling DeepSeek with 11286 tokens of messages
+2025-12-06 21:13:37 [INFO] crtrans.prompting - Calling DeepSeek with 779 tokens of messages
+2025-12-06 21:13:41 [INFO] crtrans.prompting - Calling DeepSeek with 11666 tokens of messages
+2025-12-06 21:14:27 [INFO] crtrans.prompting - Calling DeepSeek with 11255 tokens of messages
+2025-12-06 21:14:37 [INFO] crtrans.prompting - Calling DeepSeek with 303 tokens of messages
+2025-12-06 21:14:44 [INFO] crtrans.prompting - Calling DeepSeek with 10989 tokens of messages
+2025-12-06 21:14:50 [INFO] crtrans.prompting - Calling DeepSeek with 669 tokens of messages
+2025-12-06 21:14:53 [INFO] crtrans.prompting - Calling DeepSeek with 11544 tokens of messages
+2025-12-06 21:15:21 [INFO] __main__ - Wrote assembled Rust to rust/translated.rs
+2025-12-06 21:15:21 [INFO] crtrans.rust_checker - Compiling Rust: rustc --edition 2021 rust/translated.rs -o rust/translated
+2025-12-06 21:15:21 [ERROR] crtrans.rust_checker - rustc failed:
+error: unexpected closing delimiter: `}`
+   --> rust/translated.rs:118:1
+    |
+ 76 | fn parse_array(s: &mut str, pos: &mut usize, indent: usize) {
+    |                                                             - this opening brace...
+...
+114 | }
+    | - ...matches this closing brace
+...
+118 | }
+    | ^ unexpected closing delimiter
+
+error: aborting due to 1 previous error
+
+
+2025-12-06 21:15:21 [WARNING] __main__ - rustc failed; invoking LLM fix iteration 1
+2025-12-06 21:15:21 [INFO] crtrans.prompting - Calling DeepSeek with 4296 tokens of messages
+2025-12-06 21:15:45 [INFO] crtrans.rust_checker - Compiling Rust: rustc --edition 2021 rust/translated.rs -o rust/translated
+2025-12-06 21:15:45 [ERROR] crtrans.rust_checker - rustc failed:
+error[E0601]: `main` function not found in crate `translated`
+   --> rust/translated.rs:111:2
+    |
+111 | }
+    |  ^ consider adding a `main` function to `rust/translated.rs`
+
+warning: unused variable: `s`
+  --> rust/translated.rs:95:17
+   |
+95 | fn parse_string(s: &str, pos: &mut usize, indent: i32) {
+   |                 ^ help: if this is intentional, prefix it with an underscore: `_s`
+   |
+   = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused variable: `indent`
+  --> rust/translated.rs:95:43
+   |
+95 | fn parse_string(s: &str, pos: &mut usize, indent: i32) {
+   |                                           ^^^^^^ help: if this is intentional, prefix it with an underscore: `_indent`
+
+warning: unused variable: `s`
+   --> rust/translated.rs:101:17
+    |
+101 | fn parse_object(s: &str, pos: &mut usize, indent: i32) {
+    |                 ^ help: if this is intentional, prefix it with an underscore: `_s`
+
+warning: unused variable: `indent`
+   --> rust/translated.rs:101:43
+    |
+101 | fn parse_object(s: &str, pos: &mut usize, indent: i32) {
+    |                                           ^^^^^^ help: if this is intentional, prefix it with an underscore: `_indent`
+
+warning: unused variable: `s`
+   --> rust/translated.rs:107:17
+    |
+107 | fn parse_number(s: &str, pos: &mut usize, indent: i32) {
+    |                 ^ help: if this is intentional, prefix it with an underscore: `_s`
+
+warning: unused variable: `indent`
+   --> rust/translated.rs:107:43
+    |
+107 | fn parse_number(s: &str, pos: &mut usize, indent: i32) {
+    |                                           ^^^^^^ help: if this is intentional, prefix it with an underscore: `_indent`
+
+error: aborting due to 1 previous error; 6 warnings emitted
+
+For more information about this error, try `rustc --explain E0601`.
+
+2025-12-06 21:15:45 [WARNING] __main__ - rustc failed; invoking LLM fix iteration 2
+2025-12-06 21:15:45 [INFO] crtrans.prompting - Calling DeepSeek with 4992 tokens of messages
+2025-12-06 21:16:09 [INFO] crtrans.rust_checker - Compiling Rust: rustc --edition 2021 rust/translated.rs -o rust/translated
+2025-12-06 21:16:10 [INFO] __main__ - Output mismatches detected; invoking LLM fix iteration 1
+2025-12-06 21:16:10 [INFO] crtrans.prompting - Calling DeepSeek with 3648 tokens of messages
+2025-12-06 21:17:00 [INFO] crtrans.rust_checker - Compiling Rust: rustc --edition 2021 rust/translated.rs -o rust/translated
+2025-12-06 21:16:58 [INFO] __main__ - Output mismatches detected; invoking LLM fix iteration 2
+2025-12-06 21:16:58 [INFO] crtrans.prompting - Calling DeepSeek with 5903 tokens of messages
+2025-12-06 21:17:56 [INFO] crtrans.rust_checker - Compiling Rust: rustc --edition 2021 rust/translated.rs -o rust/translated
+2025-12-06 21:17:56 [ERROR] crtrans.rust_checker - rustc failed:
+error: prefix `Here` is unknown
+ --> rust/translated.rs:1:1
+  |
+1 | Here's the corrected Rust code that matches the C reference outputs:
+  | ^^^^ unknown prefix
+  |
+  = note: prefixed identifiers and literals are reserved since Rust 2021
+help: consider inserting whitespace here
+  |
+1 | Here 's the corrected Rust code that matches the C reference outputs:
+  |     +
+
+error: unknown start of token: `
+ --> rust/translated.rs:3:1
+  |
+3 | ```rust
+  | ^^^
+  |
+  = note: character appears 2 more times
+help: Unicode character '`' (Grave Accent) looks like ''' (Single Quote), but it is not
+  |
+3 - ```rust
+3 + '''rust
+  |
+
+error: unknown start of token: `
+   --> rust/translated.rs:234:1
+    |
+234 | ```
+    | ^^^
+    |
+    = note: character appears 2 more times
+help: Unicode character '`' (Grave Accent) looks like ''' (Single Quote), but it is not
+    |
+234 - ```
+234 + '''
+    |
+
+error: unknown start of token: `
+   --> rust/translated.rs:238:33
+    |
+238 | 1. **Empty input handling**: In `parse_value`, when position is at end of string...
+    |                                 ^
+    |
+help: Unicode character '`' (Grave Accent) looks like ''' (Single Quote), but it is not
+    |
+238 - 1. **Empty input handling**: In `parse_value`, when position is at end of string, print "null" instead of returning silently.
+238 + 1. **Empty input handling**: In 'parse_value`, when position is at end of string, print "null" instead of returning silently.
+    |
+
+error: unknown start of token: `
+   --> rust/translated.rs:238:45
+    |
+238 | 1. **Empty input handling**: In `parse_value`, when position is at end of string...
+    |                                             ^
+    |
+help: Unicode character '`' (Grave Accent) looks like ''' (Single Quote), but it is not
+    |
+238 - 1. **Empty input handling**: In `parse_value`, when position is at end of string, print "null" instead of returning silently.
+238 + 1. **Empty input handling**: In `parse_value', when position is at end of string, print "null" instead of returning silently.
+    |
+
+error: unknown start of token: `
+   --> rust/translated.rs:240:40
+    |
+240 | 2. **Invalid object key handling**: In `parse_object`, when key is not a string ...
+    |                                        ^
+    |
+help: Unicode character '`' (Grave Accent) looks like ''' (Single Quote), but it is not
+    |
+240 - 2. **Invalid object key handling**: In `parse_object`, when key is not a string (not starting with `"`), print "null" and break instead of advancing position.
+240 + 2. **Invalid object key handling**: In 'parse_object`, when key is not a string (not starting with `"`), print "null" and break instead of advancing position.
+    |
+
+error: unknown start of token: `
+   --> rust/translated.rs:240:53
+    |
+240 | 2. **Invalid object key handling**: In `parse_object`, when key is not a string ...
+    |                                                     ^
+    |
+help: Unicode character '`' (Grave Accent) looks like ''' (Single Quote), but it is not
+    |
+240 - 2. **Invalid object key handling**: In `parse_object`, when key is not a string (not starting with `"`), print "null" and break instead of advancing position.
+240 + 2. **Invalid object key handling**: In `parse_object', when key is not a string (not starting with `"`), print "null" and break instead of advancing position.
+    |
+
+error: unknown start of token: `
+   --> rust/translated.rs:240:100
+    |
+240 | ...ey is not a string (not starting with `"`), print "null" and break instead of...
+    |                                          ^
+    |
+help: Unicode character '`' (Grave Accent) looks like ''' (Single Quote), but it is not
+    |
+240 - 2. **Invalid object key handling**: In `parse_object`, when key is not a string (not starting with `"`), print "null" and break instead of advancing position.
+240 + 2. **Invalid object key handling**: In `parse_object`, when key is not a string (not starting with '"`), print "null" and break instead of advancing position.
+    |
+
+error[E0765]: unterminated double quote string
+   --> rust/translated.rs:250:129
+    |
+250 | ...utputs "null" to match the C reference implementation's behavior.
+    |                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error: aborting due to 9 previous errors
+
+For more information about this error, try `rustc --explain E0765`.
+
+2025-12-06 21:17:56 [INFO] __main__ - Fix iteration produced compile errors; attempting next iteration
+2025-12-06 21:17:56 [INFO] __main__ - Output mismatches detected; invoking LLM fix iteration 3
+2025-12-06 21:17:56 [INFO] crtrans.prompting - Calling DeepSeek with 7494 tokens of messages
+2025-12-06 21:18:56 [INFO] crtrans.rust_checker - Compiling Rust: rustc --edition 2021 rust/translated.rs -o rust/translated
+2025-12-06 21:18:57 [WARNING] __main__ - Output mismatches:
+Sample 1 mismatch: C stdout='null\n', Rust stdout='{}\n', rc C=0, rc Rust=0
+Sample 2 mismatch: C stdout='null\n', Rust stdout='[]\n', rc C=0, rc Rust=0
+Sample 3 mismatch: C stdout='null\n', Rust stdout='{\n  "key"42\n}\n', rc C=0, rc Rust=0
+Sample 4 mismatch: C stdout='null\n', Rust stdout='[\n  true,\n  false,\n  null\n]\n', rc C=0, rc Rust=0
+2025-12-06 21:18:57 [INFO] __main__ - Saved final Rust to rust/json_parser.rs
+2025-12-06 21:18:57 [INFO] crtrans.prompting - Calling DeepSeek with 10346 tokens of messages
+2025-12-06 21:19:26 [INFO] __main__ - Wrote final equivalence report to temp/report_json_parser.md

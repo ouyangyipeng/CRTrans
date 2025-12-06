@@ -1,7 +1,7 @@
 [
     {
         "directory": "/work/CRTrans/C",
-        "command": "clang -O0 -c quick_sort.c -o quick_sort.o",
-        "file": "quick_sort.c"
+        "command": "clang -O0 -c json_parser.c -o json_parser.o",
+        "file": "json_parser.c"
     }
 ]

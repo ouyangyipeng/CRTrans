@@ -12,10 +12,22 @@ logger = logging.getLogger(__name__)
 try:
     from clang import cindex
     lib_override = os.getenv("LIBCLANG_PATH")
+    candidate_libs = []
     if lib_override:
-        cindex.Config.set_library_file(lib_override)
-    # Default to regex unless explicitly forced on via env to avoid symbol issues.
-    _CINDEX_AVAILABLE = bool(os.getenv("ENABLE_LIBCLANG"))
+        candidate_libs.append(lib_override)
+    candidate_libs.extend([
+        "/usr/lib/llvm-14/lib/libclang.so",
+        "/usr/lib/llvm-14/lib/libclang.so.1",
+    ])
+    _CINDEX_AVAILABLE = False
+    for lib in candidate_libs:
+        if Path(lib).exists():
+            try:
+                cindex.Config.set_library_file(lib)
+                _CINDEX_AVAILABLE = True
+                break
+            except Exception:  # noqa: BLE001
+                continue
 except ImportError:
     cindex = None
     _CINDEX_AVAILABLE = False
