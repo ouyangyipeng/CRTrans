@@ -156,3 +156,517 @@ Some errors have detailed explanations: E0428, E0601.
 For more information about an error, try `rustc --explain E0428`.
 
 2025-12-06 18:55:55 [ERROR] __main__ - Rust compilation failed; inspect rust/translated.rs
+2025-12-06 19:28:17 [INFO] __main__ - Using C file: /work/CRTrans/C/test.c
+2025-12-06 19:28:17 [INFO] crtrans.info_builder - Compiling C: gcc -O0 /work/CRTrans/C/test.c -o temp/c_binary
+2025-12-06 19:28:18 [INFO] crtrans.prompting - Calling DeepSeek with 426 tokens of messages
+2025-12-06 19:28:21 [WARNING] crtrans.info_builder - LLM info parse failed, fallback to empty input
+2025-12-06 19:28:21 [INFO] crtrans.info_builder - Wrote info.md to temp/info.md
+2025-12-06 19:28:21 [INFO] crtrans.c2rust_wrapper - Wrote compile_commands.json at temp/compile_commands.json
+2025-12-06 19:28:21 [INFO] crtrans.c2rust_wrapper - Running c2rust: c2rust transpile --emit-build-files --output-dir temp/c2rust temp/compile_commands.json
+2025-12-06 19:28:21 [WARNING] crtrans.c_parser - libclang present but failed to initialize; using regex fallback
+2025-12-06 19:28:21 [WARNING] crtrans.c_parser - libclang unavailable; falling back to regex feature extraction
+2025-12-06 19:28:21 [INFO] crtrans.prompting - Calling DeepSeek with 299 tokens of messages
+2025-12-06 19:28:24 [WARNING] crtrans.translator - Signature parse failed, fallback to raw text
+2025-12-06 19:28:24 [INFO] crtrans.prompting - Calling DeepSeek with 1095 tokens of messages
+2025-12-06 19:28:28 [INFO] crtrans.prompting - Calling DeepSeek with 1124 tokens of messages
+2025-12-06 19:28:31 [INFO] __main__ - Wrote assembled Rust to rust/translated.rs
+2025-12-06 19:28:31 [INFO] crtrans.rust_checker - Compiling Rust: rustc --edition 2021 rust/translated.rs -o rust/translated
+2025-12-06 19:28:31 [WARNING] __main__ - Output mismatches:
+Sample 1 mismatch: C stdout='5\n', Rust stdout='5\n', rc C=0, rc Rust=0
+2025-12-06 19:28:31 [INFO] __main__ - Saved final Rust to rust/test.rs
+2025-12-06 19:29:43 [INFO] __main__ - Using C file: /work/CRTrans/C/test.c
+2025-12-06 19:29:43 [INFO] crtrans.info_builder - Compiling C: gcc -O0 /work/CRTrans/C/test.c -o temp/c_binary
+2025-12-06 19:29:44 [INFO] crtrans.prompting - Calling DeepSeek with 426 tokens of messages
+2025-12-06 19:29:47 [WARNING] crtrans.info_builder - LLM info parse failed, fallback to empty input
+2025-12-06 19:29:47 [INFO] crtrans.info_builder - Wrote info.md to temp/info.md
+2025-12-06 19:29:47 [INFO] crtrans.c2rust_wrapper - Wrote compile_commands.json at temp/compile_commands.json
+2025-12-06 19:29:47 [INFO] crtrans.c2rust_wrapper - Running c2rust: c2rust transpile --emit-build-files --output-dir temp/c2rust temp/compile_commands.json
+2025-12-06 19:29:47 [WARNING] crtrans.c_parser - libclang present but failed to initialize; using regex fallback
+2025-12-06 19:29:47 [WARNING] crtrans.c_parser - libclang unavailable; falling back to regex feature extraction
+2025-12-06 19:29:47 [INFO] crtrans.prompting - Calling DeepSeek with 299 tokens of messages
+2025-12-06 19:29:50 [WARNING] crtrans.translator - Signature parse failed, fallback to raw text
+2025-12-06 19:29:50 [INFO] crtrans.prompting - Calling DeepSeek with 1095 tokens of messages
+2025-12-06 19:29:55 [INFO] crtrans.prompting - Calling DeepSeek with 1124 tokens of messages
+2025-12-06 19:29:58 [INFO] __main__ - Wrote assembled Rust to rust/translated.rs
+2025-12-06 19:29:58 [INFO] crtrans.rust_checker - Compiling Rust: rustc --edition 2021 rust/translated.rs -o rust/translated
+2025-12-06 19:29:58 [INFO] __main__ - Outputs match for provided samples
+2025-12-06 19:29:58 [INFO] __main__ - Saved final Rust to rust/test.rs
+2025-12-06 19:37:29 [INFO] __main__ - Using C file: /work/CRTrans/C/merge_sort.c
+2025-12-06 19:37:29 [INFO] crtrans.info_builder - Compiling C: gcc -O0 /work/CRTrans/C/merge_sort.c -o temp/c_binary
+2025-12-06 19:37:29 [INFO] crtrans.prompting - Calling DeepSeek with 3013 tokens of messages
+2025-12-06 19:37:35 [INFO] crtrans.info_builder - LLM info parse failed, using default empty sample
+2025-12-06 19:37:35 [INFO] crtrans.info_builder - Wrote info.md to temp/info.md
+2025-12-06 19:37:35 [INFO] crtrans.c2rust_wrapper - Wrote compile_commands.json at temp/compile_commands.json
+2025-12-06 19:37:35 [INFO] crtrans.c2rust_wrapper - Running c2rust: c2rust transpile --emit-build-files --output-dir temp/c2rust temp/compile_commands.json
+2025-12-06 19:37:35 [INFO] crtrans.c_parser - Using regex feature extraction
+2025-12-06 19:37:35 [INFO] crtrans.prompting - Calling DeepSeek with 333 tokens of messages
+2025-12-06 19:37:38 [INFO] crtrans.prompting - Calling DeepSeek with 5444 tokens of messages
+2025-12-06 19:37:41 [INFO] crtrans.prompting - Calling DeepSeek with 574 tokens of messages
+2025-12-06 19:37:41 [INFO] crtrans.prompting - Calling DeepSeek with 5733 tokens of messages
+2025-12-06 19:37:56 [INFO] crtrans.prompting - Calling DeepSeek with 401 tokens of messages
+2025-12-06 19:37:59 [INFO] crtrans.prompting - Calling DeepSeek with 5597 tokens of messages
+2025-12-06 19:38:11 [INFO] crtrans.prompting - Calling DeepSeek with 1115 tokens of messages
+2025-12-06 19:38:11 [INFO] crtrans.prompting - Calling DeepSeek with 6306 tokens of messages
+2025-12-06 19:38:21 [INFO] crtrans.prompting - Calling DeepSeek with 6179 tokens of messages
+2025-12-06 19:38:34 [INFO] __main__ - Wrote assembled Rust to rust/translated.rs
+2025-12-06 19:38:34 [INFO] crtrans.rust_checker - Compiling Rust: rustc --edition 2021 rust/translated.rs -o rust/translated
+2025-12-06 19:38:34 [ERROR] crtrans.rust_checker - rustc failed:
+error[E0428]: the name `merge_sort` is defined multiple times
+  --> rust/translated.rs:64:1
+   |
+ 5 | fn merge_sort(a: &mut [i32], l: usize, r: usize) {
+   | ------------------------------------------------ previous definition of the value `merge_sort` here
+...
+64 | fn merge_sort<T: Ord + Copy>(arr: &mut [T], left: usize, right: usize) {
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ `merge_sort` redefined here
+   |
+   = note: `merge_sort` must be defined only once in the value namespace of this module
+
+error[E0308]: mismatched types
+  --> rust/translated.rs:78:16
+   |
+64 | fn merge_sort<T: Ord + Copy>(arr: &mut [T], left: usize, right: usize) {
+   |               - found this type parameter
+...
+78 |     merge_sort(arr, left, mid);
+   |     ---------- ^^^ expected `&mut [i32]`, found `&mut [T]`
+   |     |
+   |     arguments to this function are incorrect
+   |
+   = note: expected mutable reference `&mut [i32]`
+              found mutable reference `&mut [T]`
+note: function defined here
+  --> rust/translated.rs:5:4
+   |
+ 5 | fn merge_sort(a: &mut [i32], l: usize, r: usize) {
+   |    ^^^^^^^^^^ -------------
+
+error[E0308]: mismatched types
+  --> rust/translated.rs:79:16
+   |
+64 | fn merge_sort<T: Ord + Copy>(arr: &mut [T], left: usize, right: usize) {
+   |               - found this type parameter
+...
+79 |     merge_sort(arr, mid + 1, right);
+   |     ---------- ^^^ expected `&mut [i32]`, found `&mut [T]`
+   |     |
+   |     arguments to this function are incorrect
+   |
+   = note: expected mutable reference `&mut [i32]`
+              found mutable reference `&mut [T]`
+note: function defined here
+  --> rust/translated.rs:5:4
+   |
+ 5 | fn merge_sort(a: &mut [i32], l: usize, r: usize) {
+   |    ^^^^^^^^^^ -------------
+
+error: aborting due to 3 previous errors
+
+Some errors have detailed explanations: E0308, E0428.
+For more information about an error, try `rustc --explain E0308`.
+
+2025-12-06 19:38:34 [WARNING] __main__ - rustc failed; invoking LLM fix iteration 1
+2025-12-06 19:38:34 [INFO] crtrans.prompting - Calling DeepSeek with 7224 tokens of messages
+2025-12-06 19:39:05 [INFO] crtrans.rust_checker - Compiling Rust: rustc --edition 2021 rust/translated.rs -o rust/translated
+2025-12-06 19:39:06 [WARNING] __main__ - Output mismatches:
+Sample 1 mismatch: C stdout='Enter Array size: Enter number[0]: Enter number[1]: Enter number[2]: Enter number[3]: Enter number[4]: Enter number[5]: Enter number[6]: Enter number[7]: Enter number[8]: Enter number[9]: Enter number[10]: Enter number[11]: Enter number[12]: Enter number[13]: Enter number[14]: Enter number[15]: Enter number[16]: Enter number[17]: Enter number[18]: Enter number[19]: Enter number[20]: Enter number[21]: Enter number[22]: Enter number[23]: Enter number[24]: Enter number[25]: Enter number[26]: Enter number[27]: Enter number[28]: Enter number[29]: Enter number[30]: Enter number[31]: Enter number[32]: Enter number[33]: Enter number[34]: Enter number[35]: Enter number[36]: Enter number[37]: Enter number[38]: Enter number[39]: Enter number[40]: Enter number[41]: Enter number[42]: Enter number[43]: Enter number[44]: Enter number[45]: Enter number[46]: Enter number[47]: Enter number[48]: Enter number[49]: Enter number[50]: Enter number[51]: Enter number[52]: Enter number[53]: Enter number[54]: Enter number[55]: Enter number[56]: Enter number[57]: Enter number[58]: Enter number[59]: Enter number[60]: Enter number[61]: Enter number[62]: Enter number[63]: Enter number[64]: Enter number[65]: Enter number[66]: Enter number[67]: Enter number[68]: Enter number[69]: Enter number[70]: Enter number[71]: Enter number[72]: Enter number[73]: Enter number[74]: Enter number[75]: Enter number[76]: Enter number[77]: Enter number[78]: Enter number[79]: Enter number[80]: Enter number[81]: Enter number[82]: Enter number[83]: Enter number[84]: Enter number[85]: Enter number[86]: Enter number[87]: Enter number[88]: Enter number[89]: Enter number[90]: Enter number[91]: Enter number[92]: Enter number[93]: Enter number[94]: Enter number[95]: Enter number[96]: Enter number[97]: Enter number[98]: Enter number[99]: Sorted Array: 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 \n', Rust stdout='Enter Array size: ', rc C=0, rc Rust=0
+2025-12-06 19:39:06 [INFO] __main__ - Saved final Rust to rust/merge_sort.rs
+2025-12-06 19:41:03 [INFO] __main__ - Using C file: /work/CRTrans/C/merge_sort.c
+2025-12-06 19:41:03 [INFO] crtrans.info_builder - Compiling C: gcc -O0 /work/CRTrans/C/merge_sort.c -o temp/c_binary
+2025-12-06 19:41:03 [INFO] crtrans.prompting - Calling DeepSeek with 3013 tokens of messages
+2025-12-06 19:41:08 [INFO] crtrans.info_builder - LLM info parse failed, using default empty sample
+2025-12-06 19:41:08 [INFO] crtrans.info_builder - Wrote info.md to temp/info.md
+2025-12-06 19:41:08 [INFO] crtrans.c2rust_wrapper - Wrote compile_commands.json at temp/compile_commands.json
+2025-12-06 19:41:08 [INFO] crtrans.c2rust_wrapper - Running c2rust: c2rust transpile --emit-build-files --output-dir temp/c2rust temp/compile_commands.json
+2025-12-06 19:41:08 [INFO] crtrans.c_parser - Using regex feature extraction
+2025-12-06 19:41:08 [INFO] crtrans.prompting - Calling DeepSeek with 333 tokens of messages
+2025-12-06 19:41:11 [INFO] crtrans.prompting - Calling DeepSeek with 5444 tokens of messages
+2025-12-06 19:41:11 [INFO] crtrans.prompting - Calling DeepSeek with 574 tokens of messages
+2025-12-06 19:41:14 [INFO] crtrans.prompting - Calling DeepSeek with 5733 tokens of messages
+2025-12-06 19:41:29 [INFO] crtrans.prompting - Calling DeepSeek with 401 tokens of messages
+2025-12-06 19:41:33 [INFO] crtrans.prompting - Calling DeepSeek with 5588 tokens of messages
+2025-12-06 19:41:43 [INFO] crtrans.prompting - Calling DeepSeek with 1115 tokens of messages
+2025-12-06 19:41:46 [INFO] crtrans.prompting - Calling DeepSeek with 6297 tokens of messages
+2025-12-06 19:41:56 [INFO] crtrans.prompting - Calling DeepSeek with 6170 tokens of messages
+2025-12-06 19:42:09 [INFO] __main__ - Wrote assembled Rust to rust/translated.rs
+2025-12-06 19:42:09 [INFO] crtrans.rust_checker - Compiling Rust: rustc --edition 2021 rust/translated.rs -o rust/translated
+2025-12-06 19:42:10 [ERROR] crtrans.rust_checker - rustc failed:
+error[E0428]: the name `swap` is defined multiple times
+  --> rust/translated.rs:60:1
+   |
+ 1 | fn swap(a: &mut i32, b: &mut i32) {
+   | --------------------------------- previous definition of the value `swap` here
+...
+60 | fn swap(a: &mut i32, b: &mut i32) {
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ `swap` redefined here
+   |
+   = note: `swap` must be defined only once in the value namespace of this module
+
+error[E0428]: the name `merge_sort` is defined multiple times
+  --> rust/translated.rs:66:1
+   |
+ 5 | fn merge_sort(a: &mut [i32], l: usize, r: usize) {
+   | ------------------------------------------------ previous definition of the value `merge_sort` here
+...
+66 | fn merge_sort<T: Ord + Copy>(a: &mut [T], l: usize, r: usize) {
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ `merge_sort` redefined here
+   |
+   = note: `merge_sort` must be defined only once in the value namespace of this module
+
+error[E0428]: the name `merge` is defined multiple times
+   --> rust/translated.rs:114:1
+    |
+ 29 | fn merge(a: &mut [i32], l: usize, mid: usize, r: usize) {
+    | ------------------------------------------------------- previous definition of the value `merge` here
+...
+114 | fn merge(a: &mut [i32], l: usize, r: usize) {
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ `merge` redefined here
+    |
+    = note: `merge` must be defined only once in the value namespace of this module
+
+error[E0308]: mismatched types
+  --> rust/translated.rs:80:16
+   |
+66 | fn merge_sort<T: Ord + Copy>(a: &mut [T], l: usize, r: usize) {
+   |               - found this type parameter
+...
+80 |     merge_sort(a, l, mid);
+   |     ---------- ^ expected `&mut [i32]`, found `&mut [T]`
+   |     |
+   |     arguments to this function are incorrect
+   |
+   = note: expected mutable reference `&mut [i32]`
+              found mutable reference `&mut [T]`
+note: function defined here
+  --> rust/translated.rs:5:4
+   |
+ 5 | fn merge_sort(a: &mut [i32], l: usize, r: usize) {
+   |    ^^^^^^^^^^ -------------
+
+error[E0308]: mismatched types
+  --> rust/translated.rs:81:16
+   |
+66 | fn merge_sort<T: Ord + Copy>(a: &mut [T], l: usize, r: usize) {
+   |               - found this type parameter
+...
+81 |     merge_sort(a, mid + 1, r);
+   |     ---------- ^ expected `&mut [i32]`, found `&mut [T]`
+   |     |
+   |     arguments to this function are incorrect
+   |
+   = note: expected mutable reference `&mut [i32]`
+              found mutable reference `&mut [T]`
+note: function defined here
+  --> rust/translated.rs:5:4
+   |
+ 5 | fn merge_sort(a: &mut [i32], l: usize, r: usize) {
+   |    ^^^^^^^^^^ -------------
+
+error[E0499]: cannot borrow `a[_]` as mutable more than once at a time
+  --> rust/translated.rs:14:29
+   |
+14 |             swap(&mut a[l], &mut a[r]);
+   |             ---- ---------  ^^^^^^^^^ second mutable borrow occurs here
+   |             |    |
+   |             |    first mutable borrow occurs here
+   |             first borrow later used by call
+   |
+   = help: use `.split_at_mut(position)` to obtain two mutable non-overlapping sub-slices
+
+error: aborting due to 6 previous errors
+
+Some errors have detailed explanations: E0308, E0428, E0499.
+For more information about an error, try `rustc --explain E0308`.
+
+2025-12-06 19:42:10 [INFO] __main__ - rustc failed; invoking LLM fix iteration 1
+2025-12-06 19:42:10 [INFO] crtrans.prompting - Calling DeepSeek with 8388 tokens of messages
+2025-12-06 19:42:32 [INFO] crtrans.rust_checker - Compiling Rust: rustc --edition 2021 rust/translated.rs -o rust/translated
+2025-12-06 19:42:33 [INFO] __main__ - Output mismatches:
+Sample 1 mismatch: C stdout='Enter Array size: Enter number[0]: Enter number[1]: Enter number[2]: Enter number[3]: Enter number[4]: Sorted Array: 1 2 3 4 5 \n', Rust stdout='Enter Array size: Enter number[0]: ', rc C=0, rc Rust=0
+2025-12-06 19:42:33 [INFO] __main__ - Saved final Rust to rust/merge_sort.rs
+2025-12-06 19:43:04 [INFO] __main__ - Using C file: /work/CRTrans/C/merge_sort.c
+2025-12-06 19:43:04 [INFO] crtrans.info_builder - Compiling C: gcc -O0 /work/CRTrans/C/merge_sort.c -o temp/c_binary
+2025-12-06 19:43:04 [INFO] crtrans.prompting - Calling DeepSeek with 3013 tokens of messages
+2025-12-06 19:43:09 [INFO] crtrans.info_builder - LLM info parse failed, using default empty sample
+2025-12-06 19:43:09 [INFO] crtrans.info_builder - Wrote info.md to temp/info.md
+2025-12-06 19:43:09 [INFO] crtrans.c2rust_wrapper - Wrote compile_commands.json at temp/compile_commands.json
+2025-12-06 19:43:09 [INFO] crtrans.c2rust_wrapper - Running c2rust: c2rust transpile --emit-build-files --output-dir temp/c2rust temp/compile_commands.json
+2025-12-06 19:43:09 [INFO] crtrans.c_parser - Using regex feature extraction
+2025-12-06 19:43:09 [INFO] crtrans.prompting - Calling DeepSeek with 333 tokens of messages
+2025-12-06 19:43:12 [INFO] crtrans.prompting - Calling DeepSeek with 5444 tokens of messages
+2025-12-06 19:43:12 [INFO] crtrans.prompting - Calling DeepSeek with 574 tokens of messages
+2025-12-06 19:43:15 [INFO] crtrans.prompting - Calling DeepSeek with 5733 tokens of messages
+2025-12-06 19:43:29 [INFO] crtrans.prompting - Calling DeepSeek with 401 tokens of messages
+2025-12-06 19:43:33 [INFO] crtrans.prompting - Calling DeepSeek with 5597 tokens of messages
+2025-12-06 19:43:41 [INFO] crtrans.prompting - Calling DeepSeek with 1115 tokens of messages
+2025-12-06 19:43:45 [INFO] crtrans.prompting - Calling DeepSeek with 6306 tokens of messages
+2025-12-06 19:43:56 [INFO] crtrans.prompting - Calling DeepSeek with 6179 tokens of messages
+2025-12-06 19:44:08 [INFO] __main__ - Wrote assembled Rust to rust/translated.rs
+2025-12-06 19:44:08 [INFO] crtrans.rust_checker - Compiling Rust: rustc --edition 2021 rust/translated.rs -o rust/translated
+2025-12-06 19:44:08 [ERROR] crtrans.rust_checker - rustc failed:
+error[E0428]: the name `merge_sort` is defined multiple times
+  --> rust/translated.rs:59:1
+   |
+ 5 | fn merge_sort(a: &mut [i32], l: usize, r: usize) {
+   | ------------------------------------------------ previous definition of the value `merge_sort` here
+...
+59 | fn merge_sort<T: Ord + Copy>(arr: &mut [T], left: usize, right: usize) {
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ `merge_sort` redefined here
+   |
+   = note: `merge_sort` must be defined only once in the value namespace of this module
+
+error[E0428]: the name `merge` is defined multiple times
+   --> rust/translated.rs:107:1
+    |
+ 28 | fn merge(a: &mut [i32], l: usize, mid: usize, r: usize) {
+    | ------------------------------------------------------- previous definition of the value `merge` here
+...
+107 | fn merge(a: &mut [i32], l: usize, r: usize) {
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ `merge` redefined here
+    |
+    = note: `merge` must be defined only once in the value namespace of this module
+
+error[E0308]: mismatched types
+  --> rust/translated.rs:73:16
+   |
+59 | fn merge_sort<T: Ord + Copy>(arr: &mut [T], left: usize, right: usize) {
+   |               - found this type parameter
+...
+73 |     merge_sort(arr, left, mid);
+   |     ---------- ^^^ expected `&mut [i32]`, found `&mut [T]`
+   |     |
+   |     arguments to this function are incorrect
+   |
+   = note: expected mutable reference `&mut [i32]`
+              found mutable reference `&mut [T]`
+note: function defined here
+  --> rust/translated.rs:5:4
+   |
+ 5 | fn merge_sort(a: &mut [i32], l: usize, r: usize) {
+   |    ^^^^^^^^^^ -------------
+
+error[E0308]: mismatched types
+  --> rust/translated.rs:74:16
+   |
+59 | fn merge_sort<T: Ord + Copy>(arr: &mut [T], left: usize, right: usize) {
+   |               - found this type parameter
+...
+74 |     merge_sort(arr, mid + 1, right);
+   |     ---------- ^^^ expected `&mut [i32]`, found `&mut [T]`
+   |     |
+   |     arguments to this function are incorrect
+   |
+   = note: expected mutable reference `&mut [i32]`
+              found mutable reference `&mut [T]`
+note: function defined here
+  --> rust/translated.rs:5:4
+   |
+ 5 | fn merge_sort(a: &mut [i32], l: usize, r: usize) {
+   |    ^^^^^^^^^^ -------------
+
+error: aborting due to 4 previous errors
+
+Some errors have detailed explanations: E0308, E0428.
+For more information about an error, try `rustc --explain E0308`.
+
+2025-12-06 19:44:08 [INFO] __main__ - rustc failed; invoking LLM fix iteration 1
+2025-12-06 19:44:08 [INFO] crtrans.prompting - Calling DeepSeek with 7466 tokens of messages
+2025-12-06 19:44:37 [INFO] crtrans.rust_checker - Compiling Rust: rustc --edition 2021 rust/translated.rs -o rust/translated
+2025-12-06 19:44:38 [INFO] __main__ - Output mismatches:
+Sample 1 mismatch: C stdout='Enter Array size: Enter number[0]: Enter number[1]: Enter number[2]: Enter number[3]: Enter number[4]: Sorted Array: 1 2 3 4 5 \n', Rust stdout='Enter Array size: Enter number[0]: Enter number[1]: Enter number[2]: Enter number[3]: Enter number[4]: Sorted Array: 0 0 0 0 0 \n', rc C=0, rc Rust=0
+2025-12-06 19:44:38 [INFO] __main__ - Saved final Rust to rust/merge_sort.rs
+2025-12-06 19:46:44 [INFO] __main__ - Using C file: /work/CRTrans/C/merge_sort.c
+2025-12-06 19:46:44 [INFO] crtrans.info_builder - Compiling C: gcc -O0 /work/CRTrans/C/merge_sort.c -o temp/c_binary
+2025-12-06 19:46:44 [INFO] crtrans.prompting - Calling DeepSeek with 3013 tokens of messages
+2025-12-06 19:46:49 [INFO] crtrans.info_builder - LLM info parse failed, using default empty sample
+2025-12-06 19:46:49 [INFO] crtrans.info_builder - Wrote info.md to temp/info.md
+2025-12-06 19:46:49 [INFO] crtrans.c2rust_wrapper - Wrote compile_commands.json at temp/compile_commands.json
+2025-12-06 19:46:49 [INFO] crtrans.c2rust_wrapper - Running c2rust: c2rust transpile --emit-build-files --output-dir temp/c2rust temp/compile_commands.json
+2025-12-06 19:46:50 [INFO] crtrans.c_parser - Using regex feature extraction
+2025-12-06 19:46:50 [INFO] crtrans.prompting - Calling DeepSeek with 333 tokens of messages
+2025-12-06 19:46:53 [INFO] crtrans.prompting - Calling DeepSeek with 5444 tokens of messages
+2025-12-06 19:46:55 [INFO] crtrans.prompting - Calling DeepSeek with 574 tokens of messages
+2025-12-06 19:46:58 [INFO] crtrans.prompting - Calling DeepSeek with 5733 tokens of messages
+2025-12-06 19:47:13 [INFO] crtrans.prompting - Calling DeepSeek with 401 tokens of messages
+2025-12-06 19:47:16 [INFO] crtrans.prompting - Calling DeepSeek with 5597 tokens of messages
+2025-12-06 19:47:23 [INFO] crtrans.prompting - Calling DeepSeek with 1115 tokens of messages
+2025-12-06 19:47:31 [INFO] crtrans.prompting - Calling DeepSeek with 6306 tokens of messages
+2025-12-06 19:47:40 [INFO] crtrans.prompting - Calling DeepSeek with 6179 tokens of messages
+2025-12-06 19:47:52 [INFO] __main__ - Wrote assembled Rust to rust/translated.rs
+2025-12-06 19:47:52 [INFO] crtrans.rust_checker - Compiling Rust: rustc --edition 2021 rust/translated.rs -o rust/translated
+2025-12-06 19:47:52 [ERROR] crtrans.rust_checker - rustc failed:
+error[E0428]: the name `swap` is defined multiple times
+  --> rust/translated.rs:60:1
+   |
+ 1 | fn swap(a: &mut i32, b: &mut i32) {
+   | --------------------------------- previous definition of the value `swap` here
+...
+60 | fn swap(a: &mut i32, b: &mut i32) {
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ `swap` redefined here
+   |
+   = note: `swap` must be defined only once in the value namespace of this module
+
+error[E0428]: the name `merge_sort` is defined multiple times
+  --> rust/translated.rs:64:1
+   |
+ 5 | fn merge_sort(a: &mut [i32], l: usize, r: usize) {
+   | ------------------------------------------------ previous definition of the value `merge_sort` here
+...
+64 | fn merge_sort<T: Ord + Copy>(arr: &mut [T], left: usize, right: usize) {
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ `merge_sort` redefined here
+   |
+   = note: `merge_sort` must be defined only once in the value namespace of this module
+
+error[E0428]: the name `merge` is defined multiple times
+   --> rust/translated.rs:112:1
+    |
+ 28 | fn merge(a: &mut [i32], l: usize, mid: usize, r: usize) {
+    | ------------------------------------------------------- previous definition of the value `merge` here
+...
+112 | fn merge(a: &mut [i32], l: usize, r: usize) {
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ `merge` redefined here
+    |
+    = note: `merge` must be defined only once in the value namespace of this module
+
+error[E0308]: mismatched types
+  --> rust/translated.rs:78:16
+   |
+64 | fn merge_sort<T: Ord + Copy>(arr: &mut [T], left: usize, right: usize) {
+   |               - found this type parameter
+...
+78 |     merge_sort(arr, left, mid);
+   |     ---------- ^^^ expected `&mut [i32]`, found `&mut [T]`
+   |     |
+   |     arguments to this function are incorrect
+   |
+   = note: expected mutable reference `&mut [i32]`
+              found mutable reference `&mut [T]`
+note: function defined here
+  --> rust/translated.rs:5:4
+   |
+ 5 | fn merge_sort(a: &mut [i32], l: usize, r: usize) {
+   |    ^^^^^^^^^^ -------------
+
+error[E0308]: mismatched types
+  --> rust/translated.rs:79:16
+   |
+64 | fn merge_sort<T: Ord + Copy>(arr: &mut [T], left: usize, right: usize) {
+   |               - found this type parameter
+...
+79 |     merge_sort(arr, mid + 1, right);
+   |     ---------- ^^^ expected `&mut [i32]`, found `&mut [T]`
+   |     |
+   |     arguments to this function are incorrect
+   |
+   = note: expected mutable reference `&mut [i32]`
+              found mutable reference `&mut [T]`
+note: function defined here
+  --> rust/translated.rs:5:4
+   |
+ 5 | fn merge_sort(a: &mut [i32], l: usize, r: usize) {
+   |    ^^^^^^^^^^ -------------
+
+error: aborting due to 5 previous errors
+
+Some errors have detailed explanations: E0308, E0428.
+For more information about an error, try `rustc --explain E0308`.
+
+2025-12-06 19:47:52 [INFO] __main__ - rustc failed; invoking LLM fix iteration 1
+2025-12-06 19:47:52 [INFO] crtrans.prompting - Calling DeepSeek with 8086 tokens of messages
+2025-12-06 19:48:24 [INFO] crtrans.rust_checker - Compiling Rust: rustc --edition 2021 rust/translated.rs -o rust/translated
+2025-12-06 19:48:24 [INFO] __main__ - Output mismatches detected; invoking LLM fix iteration 1
+2025-12-06 19:48:24 [INFO] crtrans.prompting - Calling DeepSeek with 3366 tokens of messages
+2025-12-06 19:48:46 [INFO] crtrans.rust_checker - Compiling Rust: rustc --edition 2021 rust/translated.rs -o rust/translated
+2025-12-06 19:48:47 [INFO] __main__ - Output mismatches detected; invoking LLM fix iteration 2
+2025-12-06 19:48:47 [INFO] crtrans.prompting - Calling DeepSeek with 3362 tokens of messages
+2025-12-06 19:49:10 [INFO] crtrans.rust_checker - Compiling Rust: rustc --edition 2021 rust/translated.rs -o rust/translated
+2025-12-06 19:49:11 [INFO] __main__ - Output mismatches detected; invoking LLM fix iteration 3
+2025-12-06 19:49:11 [INFO] crtrans.prompting - Calling DeepSeek with 3362 tokens of messages
+2025-12-06 19:49:33 [INFO] crtrans.rust_checker - Compiling Rust: rustc --edition 2021 rust/translated.rs -o rust/translated
+2025-12-06 19:49:34 [INFO] __main__ - Remaining output mismatches after fixes:
+Sample 1 mismatch: C stdout='Enter Array size: Enter number[0]: Enter number[1]: Enter number[2]: Enter number[3]: Enter number[4]: Sorted Array: 1 2 3 4 5 \n', Rust stdout='Enter Array size: Enter number[0]: ', rc C=0, rc Rust=0
+2025-12-06 19:49:34 [INFO] __main__ - Saved final Rust to rust/merge_sort.rs
+2025-12-06 19:51:39 [INFO] __main__ - Using C file: /work/CRTrans/C/merge_sort.c
+2025-12-06 19:51:39 [INFO] crtrans.info_builder - Compiling C: gcc -O0 /work/CRTrans/C/merge_sort.c -o temp/c_binary
+2025-12-06 19:51:40 [INFO] crtrans.prompting - Calling DeepSeek with 3013 tokens of messages
+2025-12-06 19:51:45 [INFO] crtrans.info_builder - LLM info parse failed, using default empty sample
+2025-12-06 19:51:45 [INFO] crtrans.info_builder - Wrote info.md to temp/info.md
+2025-12-06 19:51:45 [INFO] crtrans.c2rust_wrapper - Wrote compile_commands.json at temp/compile_commands.json
+2025-12-06 19:51:45 [INFO] crtrans.c2rust_wrapper - Running c2rust: c2rust transpile --emit-build-files --output-dir temp/c2rust temp/compile_commands.json
+2025-12-06 19:51:46 [INFO] crtrans.c_parser - Using regex feature extraction
+2025-12-06 19:51:46 [INFO] crtrans.prompting - Calling DeepSeek with 333 tokens of messages
+2025-12-06 19:51:48 [INFO] crtrans.prompting - Calling DeepSeek with 5444 tokens of messages
+2025-12-06 19:51:51 [INFO] crtrans.prompting - Calling DeepSeek with 574 tokens of messages
+2025-12-06 19:52:00 [INFO] crtrans.prompting - Calling DeepSeek with 5733 tokens of messages
+2025-12-06 19:52:10 [INFO] crtrans.prompting - Calling DeepSeek with 401 tokens of messages
+2025-12-06 19:52:13 [INFO] crtrans.prompting - Calling DeepSeek with 5597 tokens of messages
+2025-12-06 19:52:24 [INFO] crtrans.prompting - Calling DeepSeek with 1115 tokens of messages
+2025-12-06 19:52:28 [INFO] crtrans.prompting - Calling DeepSeek with 6306 tokens of messages
+2025-12-06 19:52:36 [INFO] crtrans.prompting - Calling DeepSeek with 6179 tokens of messages
+2025-12-06 19:53:45 [INFO] __main__ - Using C file: /work/CRTrans/C/merge_sort.c
+2025-12-06 19:53:45 [INFO] crtrans.info_builder - Compiling C: gcc -O0 /work/CRTrans/C/merge_sort.c -o temp/c_binary
+2025-12-06 19:53:46 [INFO] crtrans.prompting - Calling DeepSeek with 3013 tokens of messages
+2025-12-06 19:53:51 [INFO] crtrans.info_builder - LLM info parse failed, using default empty sample
+2025-12-06 19:53:51 [INFO] crtrans.info_builder - Wrote info.md to temp/info.md
+2025-12-06 19:53:51 [INFO] crtrans.c2rust_wrapper - Wrote compile_commands.json at temp/compile_commands.json
+2025-12-06 19:53:51 [INFO] crtrans.c2rust_wrapper - Running c2rust: c2rust transpile --emit-build-files --output-dir temp/c2rust temp/compile_commands.json
+2025-12-06 19:53:51 [INFO] crtrans.c_parser - Using regex feature extraction
+2025-12-06 19:53:51 [INFO] crtrans.prompting - Calling DeepSeek with 333 tokens of messages
+2025-12-06 19:53:54 [INFO] crtrans.prompting - Calling DeepSeek with 5444 tokens of messages
+2025-12-06 19:54:00 [INFO] crtrans.prompting - Calling DeepSeek with 574 tokens of messages
+2025-12-06 19:54:03 [INFO] crtrans.prompting - Calling DeepSeek with 5733 tokens of messages
+2025-12-06 19:54:16 [INFO] crtrans.prompting - Calling DeepSeek with 401 tokens of messages
+2025-12-06 19:54:20 [INFO] crtrans.prompting - Calling DeepSeek with 5597 tokens of messages
+2025-12-06 19:54:31 [INFO] crtrans.prompting - Calling DeepSeek with 1115 tokens of messages
+2025-12-06 19:54:33 [INFO] crtrans.prompting - Calling DeepSeek with 6306 tokens of messages
+2025-12-06 19:54:43 [INFO] crtrans.prompting - Calling DeepSeek with 6179 tokens of messages
+2025-12-06 19:54:58 [INFO] __main__ - Wrote assembled Rust to rust/translated.rs
+2025-12-06 19:54:58 [INFO] crtrans.rust_checker - Compiling Rust: rustc --edition 2021 rust/translated.rs -o rust/translated
+2025-12-06 19:54:58 [ERROR] crtrans.rust_checker - rustc failed:
+error[E0499]: cannot borrow `a[_]` as mutable more than once at a time
+ --> rust/translated.rs:8:29
+  |
+8 |             swap(&mut a[l], &mut a[r]);
+  |             ---- ---------  ^^^^^^^^^ second mutable borrow occurs here
+  |             |    |
+  |             |    first mutable borrow occurs here
+  |             first borrow later used by call
+  |
+  = help: use `.split_at_mut(position)` to obtain two mutable non-overlapping sub-slices
+
+error: aborting due to 1 previous error
+
+For more information about this error, try `rustc --explain E0499`.
+
+2025-12-06 19:54:58 [INFO] __main__ - rustc failed; invoking LLM fix iteration 1
+2025-12-06 19:54:58 [INFO] crtrans.prompting - Calling DeepSeek with 3688 tokens of messages
+2025-12-06 19:55:22 [INFO] crtrans.rust_checker - Compiling Rust: rustc --edition 2021 rust/translated.rs -o rust/translated
+2025-12-06 19:55:23 [INFO] __main__ - Output mismatches detected; invoking LLM fix iteration 1
+2025-12-06 19:55:23 [INFO] crtrans.prompting - Calling DeepSeek with 3566 tokens of messages
+2025-12-06 19:55:46 [INFO] crtrans.rust_checker - Compiling Rust: rustc --edition 2021 rust/translated.rs -o rust/translated
+2025-12-06 19:55:46 [INFO] __main__ - Output mismatches detected; invoking LLM fix iteration 2
+2025-12-06 19:55:46 [INFO] crtrans.prompting - Calling DeepSeek with 3509 tokens of messages
+2025-12-06 19:56:15 [INFO] crtrans.rust_checker - Compiling Rust: rustc --edition 2021 rust/translated.rs -o rust/translated
+2025-12-06 19:56:15 [INFO] __main__ - Output mismatches detected; invoking LLM fix iteration 3
+2025-12-06 19:56:15 [INFO] crtrans.prompting - Calling DeepSeek with 3509 tokens of messages
+2025-12-06 19:56:40 [INFO] crtrans.rust_checker - Compiling Rust: rustc --edition 2021 rust/translated.rs -o rust/translated
+2025-12-06 19:56:40 [INFO] __main__ - Remaining output mismatches after fixes:
+Sample 1 mismatch: C stdout='Enter Array size: Enter number[0]: Enter number[1]: Enter number[2]: Enter number[3]: Enter number[4]: Sorted Array: 1 2 3 4 5 \n', Rust stdout='Enter Array size: Enter number[0]: ', rc C=0, rc Rust=0
+2025-12-06 19:56:40 [INFO] __main__ - Saved final Rust to rust/merge_sort.rs
+2025-12-06 20:07:17 [INFO] __main__ - Using C file: /work/CRTrans/C/test.c
+2025-12-06 20:07:17 [INFO] crtrans.info_builder - Compiling C: gcc -O0 /work/CRTrans/C/test.c -o temp/c_binary
+2025-12-06 20:07:18 [INFO] crtrans.prompting - Calling DeepSeek with 426 tokens of messages
+2025-12-06 20:07:18 [WARNING] crtrans.info_builder - LLM info parse failed, fallback to empty input
+2025-12-06 20:07:18 [INFO] crtrans.info_builder - Wrote info.md to temp/info.md
+2025-12-06 20:07:18 [INFO] crtrans.c2rust_wrapper - Wrote compile_commands.json at temp/compile_commands.json
+2025-12-06 20:07:18 [INFO] crtrans.c2rust_wrapper - Running c2rust: c2rust transpile --emit-build-files --output-dir temp/c2rust temp/compile_commands.json
+2025-12-06 20:07:18 [WARNING] crtrans.c_parser - libclang present but failed to initialize; using regex fallback
+2025-12-06 20:07:18 [WARNING] crtrans.c_parser - libclang unavailable; falling back to regex feature extraction
+2025-12-06 20:07:18 [INFO] crtrans.prompting - Calling DeepSeek with 299 tokens of messages
+2025-12-06 20:07:21 [WARNING] crtrans.translator - Signature parse failed, fallback to raw text
+2025-12-06 20:07:21 [INFO] crtrans.prompting - Calling DeepSeek with 1095 tokens of messages
+2025-12-06 20:07:24 [INFO] crtrans.prompting - Calling DeepSeek with 1124 tokens of messages
+2025-12-06 20:07:26 [INFO] __main__ - Wrote assembled Rust to rust/translated.rs
+2025-12-06 20:07:26 [INFO] crtrans.rust_checker - Compiling Rust: rustc --edition 2021 rust/translated.rs -o rust/translated
+2025-12-06 20:07:26 [INFO] __main__ - Outputs match for provided samples
+2025-12-06 20:07:26 [INFO] __main__ - Saved final Rust to rust/test.rs

@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import logging
+import os
 import re
 from dataclasses import dataclass, field
 from pathlib import Path
@@ -10,8 +11,13 @@ logger = logging.getLogger(__name__)
 
 try:
     from clang import cindex
+    lib_override = os.getenv("LIBCLANG_PATH")
+    if lib_override:
+        cindex.Config.set_library_file(lib_override)
+    _CINDEX_AVAILABLE = False
     try:
-        cindex.Config.set_library_file("/usr/lib/llvm-15/lib/libclang.so.1")
+        # Avoid noisy symbol errors by only enabling when library loads cleanly.
+        _ = cindex.Config.library_path
         _CINDEX_AVAILABLE = True
     except Exception:  # noqa: BLE001
         _CINDEX_AVAILABLE = False

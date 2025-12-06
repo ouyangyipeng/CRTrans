@@ -45,6 +45,7 @@ def main() -> None:
     parser.add_argument("--api-key", help="DeepSeek API key", default=None)
     parser.add_argument("--work-dir", default="temp", help="Working directory for intermediates")
     parser.add_argument("--rust-out", default="rust/translated.rs", help="Final rust output file")
+    parser.add_argument("--max-fix-iters", type=int, default=3, help="Max rustc+LLM fix iterations")
     args = parser.parse_args()
 
     work_dir = Path(args.work_dir)
@@ -80,11 +81,16 @@ def main() -> None:
         if feat.kind != "function":
             translations[feat.name] = feat.code
             continue
-        sigs = generate_signatures(feat, args.api_key, sig_prompt)
-        target_sig = sigs[0] if sigs else f"fn {feat.name}() {{ unimplemented!() }}"
+        if feat.name == "main":
+            target_sig = "fn main()"
+        else:
+            sigs = generate_signatures(feat, args.api_key, sig_prompt)
+            target_sig = sigs[0] if sigs else f"fn {feat.name}() {{ unimplemented!() }}"
         chosen_sigs[feat.name] = target_sig
         callees = [chosen_sigs.get(dep, dep) for dep in feat.deps if dep in chosen_sigs]
         rust_code = translate_function(feat, target_sig, callees, static_hint, args.api_key, translate_prompt)
+        if not rust_code.strip():
+            rust_code = target_sig + " { unimplemented!(); }"
         translations[feat.name] = rust_code
 
     assembled = assemble_rust(features, translations)
@@ -94,13 +100,54 @@ def main() -> None:
     logger.info("Wrote assembled Rust to %s", rust_out_path)
 
     ok, stderr = compile_rust(rust_out_path)
+    fix_prompt = prompt_dir / "fix_prompt.txt"
+    compare_fix_prompt = prompt_dir / "compare_fix_prompt.txt"
+    iter_idx = 0
+    while not ok and iter_idx < args.max_fix_iters:
+        iter_idx += 1
+        logger.warning("rustc failed; invoking LLM fix iteration %d", iter_idx)
+        current = rust_out_path.read_text(encoding="utf-8")
+        fixed = translate_function(  # reuse helper to call LLM with fix prompt
+            Feature("file", "function", current, set()),
+            target_sig="",
+            callee_sigs=[],
+            static_hint=stderr,
+            api_key=args.api_key,
+            prompt_file=fix_prompt,
+        )
+        rust_out_path.write_text(fixed, encoding="utf-8")
+        ok, stderr = compile_rust(rust_out_path)
+
     if not ok:
-        logger.error("Rust compilation failed; inspect %s", rust_out_path)
+        logger.error("Rust compilation failed after fixes; inspect %s", rust_out_path)
         return
 
     rust_bin = rust_out_path.with_suffix("")
     r_outputs = run_binary(rust_bin, samples)
     diffs = compare_outputs(c_outputs, r_outputs)
+    iter_cmp = 0
+    while diffs and iter_cmp < args.max_fix_iters:
+        logger.info("Output mismatches detected; invoking LLM fix iteration %d", iter_cmp + 1)
+        iter_cmp += 1
+        current = rust_out_path.read_text(encoding="utf-8")
+        diff_text = "\n".join(diffs)
+        fixed = translate_function(
+            Feature("file", "function", current, set()),
+            target_sig="",
+            callee_sigs=[],
+            static_hint=diff_text,
+            api_key=args.api_key,
+            prompt_file=compare_fix_prompt,
+        )
+        rust_out_path.write_text(fixed, encoding="utf-8")
+        ok, stderr = compile_rust(rust_out_path)
+        if not ok:
+            logger.info("Fix iteration produced compile errors; attempting next iteration")
+            continue
+        rust_bin = rust_out_path.with_suffix("")
+        r_outputs = run_binary(rust_bin, samples)
+        diffs = compare_outputs(c_outputs, r_outputs)
+
     if diffs:
         logger.warning("Output mismatches:\n%s", "\n".join(diffs))
     else:

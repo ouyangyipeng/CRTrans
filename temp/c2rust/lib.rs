@@ -7,5 +7,5 @@
 
 
 pub mod src {
-pub mod hello;
+pub mod test;
 } // mod src

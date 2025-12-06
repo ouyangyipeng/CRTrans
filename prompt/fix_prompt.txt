@@ -1,0 +1,9 @@
+You are a Rust compiler assistant. Fix the provided Rust source code so that it compiles cleanly. Apply minimal changes that address the errors. Preserve semantics and avoid adding unsafe unless necessary. Output the full corrected Rust file without Markdown fences.
+
+Current code:
+{c_function}
+
+Rustc errors:
+{static_hint}
+
+You may ignore target_sig and callee_sigs placeholders. Return only the corrected Rust code.

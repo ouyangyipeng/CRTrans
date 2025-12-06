@@ -31,8 +31,8 @@ def run_binary(bin_path: Path, inputs: List[str]) -> List[Dict[str, str]]:
 def compare_outputs(c_outputs: List[Dict[str, str]], r_outputs: List[Dict[str, str]]) -> List[str]:
     diffs: List[str] = []
     for i, (c_out, r_out) in enumerate(zip(c_outputs, r_outputs)):
-        c_rc = c_out.get("rc", c_out.get("returncode", ""))
-        r_rc = r_out.get("rc", r_out.get("returncode", ""))
+        c_rc = str(c_out.get("rc", c_out.get("returncode", "")))
+        r_rc = str(r_out.get("rc", r_out.get("returncode", "")))
         if c_out.get("stdout") != r_out.get("stdout") or c_rc != r_rc:
             diffs.append(
                 f"Sample {i+1} mismatch: C stdout={c_out.get('stdout')!r}, Rust stdout={r_out.get('stdout')!r}, rc C={c_rc}, rc Rust={r_rc}"

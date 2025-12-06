@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import json
 import logging
+import re
 from pathlib import Path
 from typing import Dict, List
 
@@ -53,8 +54,21 @@ def translate_function(
 
 
 def assemble_rust(features: List[Feature], translations: Dict[str, str]) -> str:
-    blocks = [translations.get(f.name, f"// TODO missing translation for {f.name}") for f in features]
-    return "\n\n".join(blocks)
+    blocks = []
+    seen: set[str] = set()
+    for f in features:
+        if f.name in seen:
+            continue
+        seen.add(f.name)
+        body = translations.get(f.name, "").strip()
+        if not body:
+            if f.name == "main":
+                body = "fn main() { /* TODO */ }"
+            else:
+                body = f"fn {f.name}() {{ unimplemented!(); }}" if f.kind == "function" else f"// missing translation for {f.name}"
+        blocks.append(body)
+    assembled = "\n\n".join(blocks)
+    return _dedup_functions(assembled)
 
 
 def _strip_code_fence(text: str) -> str:
@@ -67,3 +81,46 @@ def _strip_code_fence(text: str) -> str:
             lines = lines[:-1]
         return "\n".join(lines)
     return text
+
+
+def _parse_signatures(resp: str, fallback_name: str) -> List[str]:
+    text = _strip_code_fence(resp).strip()
+    sigs: List[str] = []
+    try:
+        data = json.loads(text)
+        if isinstance(data, dict):
+            sigs = data.get("signatures", [])
+    except Exception:  # noqa: BLE001
+        pass
+    if not sigs:
+        for line in text.splitlines():
+            line = line.strip()
+            if line.startswith("fn "):
+                sigs.append(line)
+    if not sigs:
+        sigs = [f"fn {fallback_name}() {{}}"]
+    return sigs[:2]
+
+
+def _dedup_functions(code: str) -> str:
+    lines = code.splitlines()
+    out: list[str] = []
+    seen: set[str] = set()
+    i = 0
+    while i < len(lines):
+        line = lines[i]
+        m = re.match(r"\s*fn\s+([A-Za-z_]\w*)", line)
+        if m:
+            name = m.group(1)
+            if name in seen:
+                # skip this function body
+                depth = line.count("{") - line.count("}")
+                i += 1
+                while i < len(lines) and depth > 0:
+                    depth += lines[i].count("{") - lines[i].count("}")
+                    i += 1
+                continue
+            seen.add(name)
+        out.append(line)
+        i += 1
+    return "\n".join(out)

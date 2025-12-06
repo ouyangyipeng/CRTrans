@@ -1,0 +1,9 @@
+You are a Rust engineer. Fix the provided Rust source so that its observable behavior matches the C reference outputs for the given sample inputs. Adjust logic, types, and printing as needed; avoid unsafe unless required. Return the full corrected Rust file with no Markdown fences.
+
+Current Rust code:
+{c_function}
+
+Observed output mismatches (Rust vs C):
+{static_hint}
+
+Keep function names stable unless renaming is necessary to resolve conflicts.

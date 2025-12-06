@@ -62,6 +62,10 @@ def build_info(
     prompt_file = prompt_dir / "info_prompt.txt"
     desc, samples, notes = ask_llm_for_info(c_source, api_key, prompt_file)
 
+    # Fallback sample when LLM does not provide one.
+    if samples == [""]:
+        samples = ["5\n5 4 3 2 1\n"]
+
     outputs = []
     for sample in samples:
         rc, out, err = _run_program(bin_path, sample)
