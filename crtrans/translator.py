@@ -19,13 +19,7 @@ def generate_signatures(feature: Feature, api_key: str | None, prompt_file: Path
         {"role": "user", "content": prompt.format(c_function=feature.code)},
     ]
     resp = call_deepseek(messages, api_key=api_key, max_tokens=512)
-    try:
-        data = json.loads(resp)
-        sigs = data.get("signatures", [])
-        return sigs[:2] if sigs else []
-    except Exception:  # noqa: BLE001
-        logger.warning("Signature parse failed, fallback to raw text")
-        return resp.splitlines()[:2]
+    return _parse_signatures(resp, feature.name)
 
 
 def translate_function(

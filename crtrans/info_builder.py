@@ -4,6 +4,7 @@ import json
 import logging
 import subprocess
 from pathlib import Path
+from typing import List, Tuple
 
 from .prompting import call_deepseek, load_prompt
 
@@ -38,17 +39,31 @@ def ask_llm_for_info(c_source: str, api_key: str | None, prompt_file: Path) -> T
     ]
     resp = call_deepseek(messages, api_key=api_key, max_tokens=1024)
     # Expect JSON lines with description + samples array + notes
+    parsed = _parse_info_json(resp)
+    if parsed:
+        return parsed
+
+    # Deterministic fallback: simple description and empty sample
+    logger.info("LLM info parse failed; using deterministic fallback")
+    return "Auto-generated description", [""], ""
+
+
+def _parse_info_json(resp: str) -> Tuple[str, List[str], str] | None:
+    text = resp.strip()
+    if text.startswith("```") and text.endswith("```"):
+        text = "\n".join(text.splitlines()[1:-1])
     try:
-        data = json.loads(resp)
+        data = json.loads(text)
         desc = data.get("description", "")
         samples = data.get("samples", [])
         notes = data.get("notes", "")
+        if not isinstance(samples, list):
+            samples = []
         if not samples:
             samples = [""]
         return desc, samples[:4], notes
     except Exception:  # noqa: BLE001
-        logger.warning("LLM info parse failed, fallback to empty input")
-        return "", [""], ""
+        return None
 
 
 def build_info(

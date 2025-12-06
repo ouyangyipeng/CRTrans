@@ -10,13 +10,13 @@ fn swap(first: &mut i32, second: &mut i32) {
 }
 
 fn partition(arr: &mut [i32], lower: usize, upper: usize) -> usize {
-    let mut i = lower.wrapping_sub(1);
+    let mut i = lower.wrapping_sub(1); // Use wrapping_sub to handle usize underflow
     
     let pivot = arr[upper];
     
     for j in lower..upper {
         if arr[j] <= pivot {
-            i = i.wrapping_add(1);
+            i = i.wrapping_add(1); // Use wrapping_add for consistency
             arr.swap(i, j);
         }
     }
@@ -44,6 +44,7 @@ fn quick_sort(arr: &mut [i32]) {
 fn main() {
     use std::io::{self, Write};
 
+    // Read array size
     print!("Enter size of array:\n");
     io::stdout().flush().unwrap();
 
@@ -56,28 +57,34 @@ fn main() {
         return;
     }
 
+    // Read array elements
     println!("Enter the elements of the array");
-    io::stdout().flush().unwrap();
+    let mut arr: Vec<i32> = Vec::with_capacity(n);
     
-    let mut input = String::new();
-    io::stdin().read_line(&mut input).unwrap();
-    
-    let arr: Vec<i32> = input
-        .split_whitespace()
-        .map(|s| s.parse().unwrap())
-        .collect();
-    
-    if arr.len() != n {
-        println!("Error: Number of elements does not match size");
-        return;
+    for _ in 0..n {
+        let mut element_input = String::new();
+        io::stdin().read_line(&mut element_input).unwrap();
+        let element: i32 = element_input.trim().parse().unwrap_or(0);
+        arr.push(element);
     }
 
+    // Display original array
     print!("Original array: ");
     display(&arr);
 
-    let mut arr_copy = arr.clone();
-    quick_sort(&mut arr_copy);
+    // Sort the array
+    let mut arr_slice = arr.as_mut_slice();
+    quick_sort(&mut arr_slice);
 
+    // Display sorted array
     print!("Sorted array: ");
-    display(&arr_copy);
+    display(&arr);
+
+    // Wait for user input (similar to getchar())
+    println!("Press Enter to exit...");
+    let mut _dummy = String::new();
+    io::stdin().read_line(&mut _dummy).unwrap();
 }
+
+// Helper functions (already translated as per provided signatures)
+

@@ -7,5 +7,5 @@
 
 
 pub mod src {
-pub mod test;
+pub mod quick_sort;
 } // mod src

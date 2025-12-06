@@ -14,13 +14,8 @@ try:
     lib_override = os.getenv("LIBCLANG_PATH")
     if lib_override:
         cindex.Config.set_library_file(lib_override)
-    _CINDEX_AVAILABLE = False
-    try:
-        # Avoid noisy symbol errors by only enabling when library loads cleanly.
-        _ = cindex.Config.library_path
-        _CINDEX_AVAILABLE = True
-    except Exception:  # noqa: BLE001
-        _CINDEX_AVAILABLE = False
+    # Default to regex unless explicitly forced on via env to avoid symbol issues.
+    _CINDEX_AVAILABLE = bool(os.getenv("ENABLE_LIBCLANG"))
 except ImportError:
     cindex = None
     _CINDEX_AVAILABLE = False
@@ -43,11 +38,10 @@ class CFeatureExtractor:
             try:
                 self._index = cindex.Index.create()
             except Exception:  # noqa: BLE001
-                logger.warning("libclang present but failed to initialize; using regex fallback")
+                self._index = None
 
     def parse(self) -> List[Feature]:
         if self._index is None:
-            logger.warning("libclang unavailable; falling back to regex feature extraction")
             return self._fallback_parse()
 
         tu = self._index.parse(str(self.c_path), args=self.clang_args)

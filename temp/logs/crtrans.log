@@ -670,3 +670,274 @@ Sample 1 mismatch: C stdout='Enter Array size: Enter number[0]: Enter number[1]:
 2025-12-06 20:07:26 [INFO] crtrans.rust_checker - Compiling Rust: rustc --edition 2021 rust/translated.rs -o rust/translated
 2025-12-06 20:07:26 [INFO] __main__ - Outputs match for provided samples
 2025-12-06 20:07:26 [INFO] __main__ - Saved final Rust to rust/test.rs
+2025-12-06 20:13:41 [INFO] __main__ - Using C file: /work/CRTrans/C/quick_sort.c
+2025-12-06 20:13:41 [INFO] crtrans.info_builder - Compiling C: gcc -O0 /work/CRTrans/C/quick_sort.c -o temp/c_binary
+2025-12-06 20:13:42 [INFO] crtrans.prompting - Calling DeepSeek with 2610 tokens of messages
+2025-12-06 20:13:46 [INFO] crtrans.info_builder - Wrote info.md to temp/info.md
+2025-12-06 20:13:46 [INFO] crtrans.c2rust_wrapper - Wrote compile_commands.json at temp/compile_commands.json
+2025-12-06 20:13:46 [INFO] crtrans.c2rust_wrapper - Running c2rust: c2rust transpile --emit-build-files --output-dir temp/c2rust temp/compile_commands.json
+2025-12-06 20:13:47 [INFO] crtrans.prompting - Calling DeepSeek with 391 tokens of messages
+2025-12-06 20:13:50 [INFO] crtrans.prompting - Calling DeepSeek with 4119 tokens of messages
+2025-12-06 20:13:54 [INFO] crtrans.prompting - Calling DeepSeek with 359 tokens of messages
+2025-12-06 20:13:57 [INFO] crtrans.prompting - Calling DeepSeek with 4106 tokens of messages
+2025-12-06 20:14:00 [INFO] crtrans.prompting - Calling DeepSeek with 824 tokens of messages
+2025-12-06 20:14:03 [INFO] crtrans.prompting - Calling DeepSeek with 4637 tokens of messages
+2025-12-06 20:14:12 [INFO] crtrans.prompting - Calling DeepSeek with 693 tokens of messages
+2025-12-06 20:14:14 [INFO] crtrans.prompting - Calling DeepSeek with 4494 tokens of messages
+2025-12-06 20:14:22 [INFO] crtrans.prompting - Calling DeepSeek with 4554 tokens of messages
+2025-12-06 20:14:38 [INFO] __main__ - Wrote assembled Rust to rust/translated.rs
+2025-12-06 20:14:38 [INFO] crtrans.rust_checker - Compiling Rust: rustc --edition 2021 rust/translated.rs -o rust/translated
+2025-12-06 20:14:38 [INFO] __main__ - Output mismatches detected; invoking LLM fix iteration 1
+2025-12-06 20:14:38 [INFO] crtrans.prompting - Calling DeepSeek with 4192 tokens of messages
+2025-12-06 20:14:56 [INFO] crtrans.rust_checker - Compiling Rust: rustc --edition 2021 rust/translated.rs -o rust/translated
+2025-12-06 20:14:57 [INFO] __main__ - Output mismatches detected; invoking LLM fix iteration 2
+2025-12-06 20:14:57 [INFO] crtrans.prompting - Calling DeepSeek with 3257 tokens of messages
+2025-12-06 20:15:18 [INFO] crtrans.rust_checker - Compiling Rust: rustc --edition 2021 rust/translated.rs -o rust/translated
+2025-12-06 20:15:16 [INFO] __main__ - Outputs match for provided samples
+2025-12-06 20:15:16 [INFO] __main__ - Saved final Rust to rust/quick_sort.rs
+2025-12-06 20:15:49 [INFO] __main__ - Using C file: /work/CRTrans/C/quick_sort.c
+2025-12-06 20:15:49 [INFO] crtrans.info_builder - Compiling C: gcc -O0 /work/CRTrans/C/quick_sort.c -o temp/c_binary
+2025-12-06 20:15:49 [INFO] crtrans.prompting - Calling DeepSeek with 2610 tokens of messages
+2025-12-06 20:15:54 [INFO] crtrans.info_builder - Wrote info.md to temp/info.md
+2025-12-06 20:15:54 [INFO] crtrans.c2rust_wrapper - Wrote compile_commands.json at temp/compile_commands.json
+2025-12-06 20:15:54 [INFO] crtrans.c2rust_wrapper - Running c2rust: c2rust transpile --emit-build-files --output-dir temp/c2rust temp/compile_commands.json
+2025-12-06 20:15:54 [INFO] crtrans.prompting - Calling DeepSeek with 391 tokens of messages
+2025-12-06 20:15:57 [INFO] crtrans.prompting - Calling DeepSeek with 4119 tokens of messages
+2025-12-06 20:16:00 [INFO] crtrans.prompting - Calling DeepSeek with 359 tokens of messages
+2025-12-06 20:16:03 [INFO] crtrans.prompting - Calling DeepSeek with 4106 tokens of messages
+2025-12-06 20:16:05 [INFO] crtrans.prompting - Calling DeepSeek with 824 tokens of messages
+2025-12-06 20:16:08 [INFO] crtrans.prompting - Calling DeepSeek with 4637 tokens of messages
+2025-12-06 20:16:13 [INFO] crtrans.prompting - Calling DeepSeek with 693 tokens of messages
+2025-12-06 20:16:16 [INFO] crtrans.prompting - Calling DeepSeek with 4494 tokens of messages
+2025-12-06 20:16:20 [INFO] crtrans.prompting - Calling DeepSeek with 4554 tokens of messages
+2025-12-06 20:16:38 [INFO] __main__ - Wrote assembled Rust to rust/translated.rs
+2025-12-06 20:16:38 [INFO] crtrans.rust_checker - Compiling Rust: rustc --edition 2021 rust/translated.rs -o rust/translated
+2025-12-06 20:16:38 [INFO] __main__ - Output mismatches detected; invoking LLM fix iteration 1
+2025-12-06 20:16:38 [INFO] crtrans.prompting - Calling DeepSeek with 4015 tokens of messages
+2025-12-06 20:17:07 [INFO] crtrans.rust_checker - Compiling Rust: rustc --edition 2021 rust/translated.rs -o rust/translated
+2025-12-06 20:17:07 [ERROR] crtrans.rust_checker - rustc failed:
+error: unknown start of token: `
+ --> rust/translated.rs:1:141
+  |
+1 | ...re it reads elements: it creates a new `String` for each element, but the input...
+  |                                           ^
+  |
+help: Unicode character '`' (Grave Accent) looks like ''' (Single Quote), but it is not
+  |
+1 - The issue is that the Rust code is reading array elements incorrectly. The problem is in the loop where it reads elements: it creates a new `String` for each element, but the input is expected to be space-separated on a single line (as in the C reference). The C code uses `scanf("%d", &arr[i])` which reads integers separated by whitespace, not necessarily on separate lines.
+1 + The issue is that the Rust code is reading array elements incorrectly. The problem is in the loop where it reads elements: it creates a new 'String` for each element, but the input is expected to be space-separated on a single line (as in the C reference). The C code uses `scanf("%d", &arr[i])` which reads integers separated by whitespace, not necessarily on separate lines.
+  |
+
+error: unknown start of token: `
+ --> rust/translated.rs:1:148
+  |
+1 | ...eads elements: it creates a new `String` for each element, but the input is exp...
+  |                                           ^
+  |
+help: Unicode character '`' (Grave Accent) looks like ''' (Single Quote), but it is not
+  |
+1 - The issue is that the Rust code is reading array elements incorrectly. The problem is in the loop where it reads elements: it creates a new `String` for each element, but the input is expected to be space-separated on a single line (as in the C reference). The C code uses `scanf("%d", &arr[i])` which reads integers separated by whitespace, not necessarily on separate lines.
+1 + The issue is that the Rust code is reading array elements incorrectly. The problem is in the loop where it reads elements: it creates a new `String' for each element, but the input is expected to be space-separated on a single line (as in the C reference). The C code uses `scanf("%d", &arr[i])` which reads integers separated by whitespace, not necessarily on separate lines.
+  |
+
+error: unknown start of token: `
+ --> rust/translated.rs:1:274
+  |
+1 | ...s in the C reference). The C code uses `scanf("%d", &arr[i])` which reads integ...
+  |                                           ^
+  |
+help: Unicode character '`' (Grave Accent) looks like ''' (Single Quote), but it is not
+  |
+1 - The issue is that the Rust code is reading array elements incorrectly. The problem is in the loop where it reads elements: it creates a new `String` for each element, but the input is expected to be space-separated on a single line (as in the C reference). The C code uses `scanf("%d", &arr[i])` which reads integers separated by whitespace, not necessarily on separate lines.
+1 + The issue is that the Rust code is reading array elements incorrectly. The problem is in the loop where it reads elements: it creates a new `String` for each element, but the input is expected to be space-separated on a single line (as in the C reference). The C code uses 'scanf("%d", &arr[i])` which reads integers separated by whitespace, not necessarily on separate lines.
+  |
+
+error: unknown start of token: `
+ --> rust/translated.rs:1:295
+  |
+1 | .... The C code uses `scanf("%d", &arr[i])` which reads integers separated by whit...
+  |                                           ^
+  |
+help: Unicode character '`' (Grave Accent) looks like ''' (Single Quote), but it is not
+  |
+1 - The issue is that the Rust code is reading array elements incorrectly. The problem is in the loop where it reads elements: it creates a new `String` for each element, but the input is expected to be space-separated on a single line (as in the C reference). The C code uses `scanf("%d", &arr[i])` which reads integers separated by whitespace, not necessarily on separate lines.
+1 + The issue is that the Rust code is reading array elements incorrectly. The problem is in the loop where it reads elements: it creates a new `String` for each element, but the input is expected to be space-separated on a single line (as in the C reference). The C code uses `scanf("%d", &arr[i])' which reads integers separated by whitespace, not necessarily on separate lines.
+  |
+
+error: prefix `Here` is unknown
+ --> rust/translated.rs:3:1
+  |
+3 | Here's the corrected Rust code:
+  | ^^^^ unknown prefix
+  |
+  = note: prefixed identifiers and literals are reserved since Rust 2021
+help: consider inserting whitespace here
+  |
+3 | Here 's the corrected Rust code:
+  |     +
+
+error: unknown start of token: `
+ --> rust/translated.rs:5:1
+  |
+5 | ```rust
+  | ^^^
+  |
+  = note: character appears 2 more times
+help: Unicode character '`' (Grave Accent) looks like ''' (Single Quote), but it is not
+  |
+5 - ```rust
+5 + '''rust
+  |
+
+error: unknown start of token: `
+   --> rust/translated.rs:100:1
+    |
+100 | ```
+    | ^^^
+    |
+    = note: character appears 2 more times
+help: Unicode character '`' (Grave Accent) looks like ''' (Single Quote), but it is not
+    |
+100 - ```
+100 + '''
+    |
+
+error: unknown start of token: `
+   --> rust/translated.rs:104:10
+    |
+104 | 2. Added `io::stdout().flush().unwrap()` after the "Enter the elements of the ar...
+    |          ^
+    |
+help: Unicode character '`' (Grave Accent) looks like ''' (Single Quote), but it is not
+    |
+104 - 2. Added `io::stdout().flush().unwrap()` after the "Enter the elements of the array" prompt to ensure the prompt appears before reading input.
+104 + 2. Added 'io::stdout().flush().unwrap()` after the "Enter the elements of the array" prompt to ensure the prompt appears before reading input.
+    |
+
+error: unknown start of token: `
+   --> rust/translated.rs:104:40
+    |
+104 | 2. Added `io::stdout().flush().unwrap()` after the "Enter the elements of the ar...
+    |                                        ^
+    |
+help: Unicode character '`' (Grave Accent) looks like ''' (Single Quote), but it is not
+    |
+104 - 2. Added `io::stdout().flush().unwrap()` after the "Enter the elements of the array" prompt to ensure the prompt appears before reading input.
+104 + 2. Added `io::stdout().flush().unwrap()' after the "Enter the elements of the array" prompt to ensure the prompt appears before reading input.
+    |
+
+error: unknown start of token: `
+   --> rust/translated.rs:105:41
+    |
+105 | 3. Created a copy of the array to sort (`arr_copy`) so we can display both the o...
+    |                                         ^
+    |
+help: Unicode character '`' (Grave Accent) looks like ''' (Single Quote), but it is not
+    |
+105 - 3. Created a copy of the array to sort (`arr_copy`) so we can display both the original and sorted arrays.
+105 + 3. Created a copy of the array to sort ('arr_copy`) so we can display both the original and sorted arrays.
+    |
+
+error: unknown start of token: `
+   --> rust/translated.rs:105:50
+    |
+105 | 3. Created a copy of the array to sort (`arr_copy`) so we can display both the o...
+    |                                                  ^
+    |
+help: Unicode character '`' (Grave Accent) looks like ''' (Single Quote), but it is not
+    |
+105 - 3. Created a copy of the array to sort (`arr_copy`) so we can display both the original and sorted arrays.
+105 + 3. Created a copy of the array to sort (`arr_copy') so we can display both the original and sorted arrays.
+    |
+
+error: unknown start of token: `
+   --> rust/translated.rs:109:1
+    |
+109 | ```
+    | ^^^
+    |
+    = note: character appears 2 more times
+help: Unicode character '`' (Grave Accent) looks like ''' (Single Quote), but it is not
+    |
+109 - ```
+109 + '''
+    |
+
+error: unknown start of token: `
+   --> rust/translated.rs:112:1
+    |
+112 | ```
+    | ^^^
+    |
+    = note: character appears 2 more times
+help: Unicode character '`' (Grave Accent) looks like ''' (Single Quote), but it is not
+    |
+112 - ```
+112 + '''
+    |
+
+error: unknown start of token: `
+   --> rust/translated.rs:115:1
+    |
+115 | ```
+    | ^^^
+    |
+    = note: character appears 2 more times
+help: Unicode character '`' (Grave Accent) looks like ''' (Single Quote), but it is not
+    |
+115 - ```
+115 + '''
+    |
+
+error: unknown start of token: `
+   --> rust/translated.rs:122:1
+    |
+122 | ```
+    | ^^^
+    |
+    = note: character appears 2 more times
+help: Unicode character '`' (Grave Accent) looks like ''' (Single Quote), but it is not
+    |
+122 - ```
+122 + '''
+    |
+
+error: unknown start of token: `
+   --> rust/translated.rs:124:163
+    |
+124 | ... (which returns 0 as the default from `unwrap_or(0)`).
+    |                                          ^
+    |
+help: Unicode character '`' (Grave Accent) looks like ''' (Single Quote), but it is not
+    |
+124 - This matches the observed behavior where the Rust code was reading 0s because it was trying to parse empty lines as integers (which returns 0 as the default from `unwrap_or(0)`).
+124 + This matches the observed behavior where the Rust code was reading 0s because it was trying to parse empty lines as integers (which returns 0 as the default from 'unwrap_or(0)`).
+    |
+
+error: unknown start of token: `
+   --> rust/translated.rs:124:176
+    |
+124 | ...ns 0 as the default from `unwrap_or(0)`).
+    |                                          ^
+    |
+help: Unicode character '`' (Grave Accent) looks like ''' (Single Quote), but it is not
+    |
+124 - This matches the observed behavior where the Rust code was reading 0s because it was trying to parse empty lines as integers (which returns 0 as the default from `unwrap_or(0)`).
+124 + This matches the observed behavior where the Rust code was reading 0s because it was trying to parse empty lines as integers (which returns 0 as the default from `unwrap_or(0)').
+    |
+
+error: expected one of `!` or `::`, found `issue`
+ --> rust/translated.rs:1:5
+  |
+1 | The issue is that the Rust code is reading array elements incorrectly. The problem...
+  |     ^^^^^ expected one of `!` or `::`
+
+error: aborting due to 18 previous errors
+
+
+2025-12-06 20:17:07 [INFO] __main__ - Fix iteration produced compile errors; attempting next iteration
+2025-12-06 20:17:07 [INFO] __main__ - Output mismatches detected; invoking LLM fix iteration 2
+2025-12-06 20:17:07 [INFO] crtrans.prompting - Calling DeepSeek with 5144 tokens of messages
+2025-12-06 20:17:23 [INFO] crtrans.rust_checker - Compiling Rust: rustc --edition 2021 rust/translated.rs -o rust/translated
+2025-12-06 20:17:23 [INFO] __main__ - Outputs match for provided samples
+2025-12-06 20:17:23 [INFO] __main__ - Saved final Rust to rust/quick_sort.rs
