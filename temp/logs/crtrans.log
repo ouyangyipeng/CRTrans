@@ -1442,3 +1442,25 @@ Sample 4 mismatch: C stdout='null\n', Rust stdout='[\n  true,\n  false,\n  null\
 2025-12-06 21:18:57 [INFO] __main__ - Saved final Rust to rust/json_parser.rs
 2025-12-06 21:18:57 [INFO] crtrans.prompting - Calling DeepSeek with 10346 tokens of messages
 2025-12-06 21:19:26 [INFO] __main__ - Wrote final equivalence report to temp/report_json_parser.md
+2025-12-06 21:31:31 [INFO] __main__ - Using C file: /work/CRTrans/C/json_parser.c
+2025-12-06 21:31:31 [INFO] crtrans.info_builder - Compiling C: gcc -O0 /work/CRTrans/C/json_parser.c -o temp/c_binary
+2025-12-06 21:31:32 [INFO] crtrans.prompting - Calling DeepSeek with 3023 tokens of messages
+2025-12-06 21:31:37 [INFO] crtrans.info_builder - Wrote info.md to temp/info.md
+2025-12-06 21:31:37 [INFO] crtrans.c2rust_wrapper - Wrote compile_commands.json at temp/compile_commands.json
+2025-12-06 21:31:37 [INFO] crtrans.c2rust_wrapper - Running c2rust: c2rust transpile --emit-build-files --output-dir temp/c2rust temp/compile_commands.json
+2025-12-06 21:31:37 [INFO] crtrans.prompting - Calling DeepSeek with 317 tokens of messages
+2025-12-06 21:31:37 [INFO] crtrans.prompting - Calling DeepSeek with 10947 tokens of messages
+2025-12-06 21:31:40 [INFO] crtrans.prompting - Calling DeepSeek with 318 tokens of messages
+2025-12-06 21:31:42 [INFO] crtrans.prompting - Calling DeepSeek with 10936 tokens of messages
+2025-12-06 21:31:50 [INFO] crtrans.prompting - Calling DeepSeek with 284 tokens of messages
+2025-12-06 21:31:54 [INFO] crtrans.prompting - Calling DeepSeek with 10906 tokens of messages
+2025-12-06 21:32:39 [INFO] crtrans.prompting - Calling DeepSeek with 633 tokens of messages
+2025-12-06 21:32:47 [INFO] crtrans.prompting - Calling DeepSeek with 11366 tokens of messages
+2025-12-06 21:33:04 [INFO] crtrans.prompting - Calling DeepSeek with 300 tokens of messages
+2025-12-06 21:33:05 [INFO] crtrans.prompting - Calling DeepSeek with 10986 tokens of messages
+2025-12-06 21:33:23 [INFO] crtrans.prompting - Calling DeepSeek with 529 tokens of messages
+2025-12-06 21:33:27 [INFO] crtrans.prompting - Calling DeepSeek with 11208 tokens of messages
+2025-12-06 21:33:36 [INFO] crtrans.prompting - Calling DeepSeek with 550 tokens of messages
+2025-12-06 21:33:38 [INFO] crtrans.prompting - Calling DeepSeek with 11258 tokens of messages
+2025-12-06 21:33:48 [INFO] crtrans.prompting - Calling DeepSeek with 779 tokens of messages
+2025-12-06 21:33:51 [INFO] crtrans.prompting - Calling DeepSeek with 11634 tokens of messages

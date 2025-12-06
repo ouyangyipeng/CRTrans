@@ -64,7 +64,7 @@ def main() -> None:
     parser.add_argument("--api-key", help="DeepSeek API key", default=None)
     parser.add_argument("--work-dir", default="temp", help="Working directory for intermediates")
     parser.add_argument("--rust-out", default="rust/translated.rs", help="Final rust output file")
-    parser.add_argument("--max-fix-iters", type=int, default=3, help="Max rustc+LLM fix iterations")
+    parser.add_argument("--max-fix-iters", type=int, default=10, help="Max rustc+LLM fix iterations (syntax and output loops combined)")
     args = parser.parse_args()
 
     work_dir = Path(args.work_dir)
@@ -145,7 +145,7 @@ def main() -> None:
     r_outputs = run_binary(rust_bin, samples)
     diffs = compare_outputs(c_outputs, r_outputs)
     iter_cmp = 0
-    while diffs and iter_cmp < args.max_fix_iters:
+    while diffs and (iter_idx + iter_cmp) < args.max_fix_iters:
         logger.info("Output mismatches detected; invoking LLM fix iteration %d", iter_cmp + 1)
         iter_cmp += 1
         current = rust_out_path.read_text(encoding="utf-8")
@@ -161,7 +161,7 @@ def main() -> None:
         rust_out_path.write_text(fixed, encoding="utf-8")
         ok, stderr = compile_rust(rust_out_path)
         if not ok:
-            logger.info("Fix iteration produced compile errors; attempting next iteration")
+            logger.info("Fix iteration produced compile errors; attempting next iteration (syntax takes priority)")
             continue
         rust_bin = rust_out_path.with_suffix("")
         r_outputs = run_binary(rust_bin, samples)
