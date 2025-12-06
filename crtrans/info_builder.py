@@ -1,0 +1,101 @@
+from __future__ import annotations
+
+import json
+import logging
+import subprocess
+from pathlib import Path
+
+from .prompting import call_deepseek, load_prompt
+
+logger = logging.getLogger(__name__)
+
+
+def compile_c(c_path: Path, output: Path) -> None:
+    cmd = ["gcc", "-O0", str(c_path), "-o", str(output)]
+    logger.info("Compiling C: %s", " ".join(cmd))
+    subprocess.run(cmd, check=True)
+
+
+def _run_program(bin_path: Path, input_text: str, timeout: int = 5) -> Tuple[int, str, str]:
+    proc = subprocess.run(
+        [str(bin_path)],
+        input=input_text.encode(),
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        timeout=timeout,
+    )
+    return proc.returncode, proc.stdout.decode(), proc.stderr.decode()
+
+
+def ask_llm_for_info(c_source: str, api_key: str | None, prompt_file: Path) -> Tuple[str, List[str], str]:
+    prompt = load_prompt(prompt_file)
+    messages = [
+        {"role": "system", "content": "You are a senior systems engineer."},
+        {
+            "role": "user",
+            "content": prompt.format(c_source=c_source),
+        },
+    ]
+    resp = call_deepseek(messages, api_key=api_key, max_tokens=1024)
+    # Expect JSON lines with description + samples array + notes
+    try:
+        data = json.loads(resp)
+        desc = data.get("description", "")
+        samples = data.get("samples", [])
+        notes = data.get("notes", "")
+        if not samples:
+            samples = [""]
+        return desc, samples[:4], notes
+    except Exception:  # noqa: BLE001
+        logger.warning("LLM info parse failed, fallback to empty input")
+        return "", [""], ""
+
+
+def build_info(
+    c_path: Path, work_dir: Path, prompt_dir: Path, api_key: str | None
+) -> tuple[Path, list[dict[str, str | int]]]:
+    c_source = c_path.read_text(encoding="utf-8")
+    bin_path = work_dir / "c_binary"
+    work_dir.mkdir(parents=True, exist_ok=True)
+
+    compile_c(c_path, bin_path)
+    prompt_file = prompt_dir / "info_prompt.txt"
+    desc, samples, notes = ask_llm_for_info(c_source, api_key, prompt_file)
+
+    outputs = []
+    for sample in samples:
+        rc, out, err = _run_program(bin_path, sample)
+        outputs.append({"input": sample, "returncode": rc, "stdout": out, "stderr": err})
+
+    info_path = work_dir / "info.md"
+    lines = [
+        f"# Info for {c_path.name}",
+        "",
+        "## Description",
+        desc or "(auto-generated)",
+        "",
+        "## Samples",
+    ]
+    for i, sample in enumerate(outputs, 1):
+        lines.append(f"### Sample {i}")
+        lines.append("Input:")
+        lines.append("````")
+        lines.append(sample["input"])
+        lines.append("````")
+        lines.append("Output:")
+        lines.append("````")
+        lines.append(sample["stdout"])
+        lines.append("````")
+        if sample["stderr"]:
+            lines.append("Stderr:")
+            lines.append("````")
+            lines.append(sample["stderr"])
+            lines.append("````")
+        lines.append("Return code: %d" % sample["returncode"])
+        lines.append("")
+    if notes:
+        lines.append("## Notes")
+        lines.append(notes)
+    info_path.write_text("\n".join(lines), encoding="utf-8")
+    logger.info("Wrote info.md to %s", info_path)
+    return info_path, outputs

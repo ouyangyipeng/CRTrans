@@ -1,0 +1,7 @@
+You are given a single C source file. Produce a JSON object with keys:
+- "description": a concise description of the program's purpose.
+- "samples": an array of up to 4 example stdin strings (keep simple).
+- "notes": short extra hints.
+C source:
+{c_source}
+Return JSON only.

@@ -1,0 +1,158 @@
+2025-12-06 18:08:24 [INFO] __main__ - Using C file: /work/CRTrans/C/hello.c
+2025-12-06 18:08:24 [INFO] crtrans.info_builder - Compiling C: gcc -O0 /work/CRTrans/C/hello.c -o temp/c_binary
+2025-12-06 18:08:25 [INFO] crtrans.prompting - Calling DeepSeek with 358 tokens of messages
+2025-12-06 18:08:29 [WARNING] crtrans.info_builder - LLM info parse failed, fallback to empty input
+2025-12-06 18:08:29 [INFO] crtrans.info_builder - Wrote info.md to temp/info.md
+2025-12-06 18:08:29 [INFO] crtrans.c2rust_wrapper - Wrote compile_commands.json at temp/compile_commands.json
+2025-12-06 18:08:29 [INFO] crtrans.c2rust_wrapper - Running c2rust: c2rust transpile --emit-build-files --output-dir temp/c2rust temp/compile_commands.json
+2025-12-06 18:09:39 [INFO] __main__ - Using C file: /work/CRTrans/C/hello.c
+2025-12-06 18:09:39 [INFO] crtrans.info_builder - Compiling C: gcc -O0 /work/CRTrans/C/hello.c -o temp/c_binary
+2025-12-06 18:09:39 [INFO] crtrans.prompting - Calling DeepSeek with 358 tokens of messages
+2025-12-06 18:09:43 [WARNING] crtrans.info_builder - LLM info parse failed, fallback to empty input
+2025-12-06 18:09:43 [INFO] crtrans.info_builder - Wrote info.md to temp/info.md
+2025-12-06 18:09:43 [INFO] crtrans.c2rust_wrapper - Wrote compile_commands.json at temp/compile_commands.json
+2025-12-06 18:09:43 [INFO] crtrans.c2rust_wrapper - Running c2rust: c2rust transpile --emit-build-files --output-dir temp/c2rust temp/compile_commands.json
+2025-12-06 18:11:17 [INFO] __main__ - Using C file: /work/CRTrans/C/hello.c
+2025-12-06 18:11:17 [INFO] crtrans.info_builder - Compiling C: gcc -O0 /work/CRTrans/C/hello.c -o temp/c_binary
+2025-12-06 18:11:17 [INFO] crtrans.prompting - Calling DeepSeek with 358 tokens of messages
+2025-12-06 18:11:21 [WARNING] crtrans.info_builder - LLM info parse failed, fallback to empty input
+2025-12-06 18:11:21 [INFO] crtrans.info_builder - Wrote info.md to temp/info.md
+2025-12-06 18:11:21 [INFO] crtrans.c2rust_wrapper - Wrote compile_commands.json at temp/compile_commands.json
+2025-12-06 18:11:21 [INFO] crtrans.c2rust_wrapper - Running c2rust: c2rust transpile --emit-build-files --output-dir temp/c2rust temp/compile_commands.json
+2025-12-06 18:16:20 [INFO] __main__ - Using C file: /work/CRTrans/C/hello.c
+2025-12-06 18:16:20 [INFO] crtrans.info_builder - Compiling C: gcc -O0 /work/CRTrans/C/hello.c -o temp/c_binary
+2025-12-06 18:16:21 [INFO] crtrans.prompting - Calling DeepSeek with 358 tokens of messages
+2025-12-06 18:16:24 [WARNING] crtrans.info_builder - LLM info parse failed, fallback to empty input
+2025-12-06 18:16:24 [INFO] crtrans.info_builder - Wrote info.md to temp/info.md
+2025-12-06 18:16:24 [INFO] crtrans.c2rust_wrapper - Wrote compile_commands.json at temp/compile_commands.json
+2025-12-06 18:16:24 [INFO] crtrans.c2rust_wrapper - Running c2rust: c2rust transpile --emit-build-files --output-dir temp/c2rust temp/compile_commands.json
+2025-12-06 18:17:37 [INFO] __main__ - Using C file: /work/CRTrans/C/hello.c
+2025-12-06 18:17:37 [INFO] crtrans.info_builder - Compiling C: gcc -O0 /work/CRTrans/C/hello.c -o temp/c_binary
+2025-12-06 18:17:37 [INFO] crtrans.prompting - Calling DeepSeek with 358 tokens of messages
+2025-12-06 18:17:41 [WARNING] crtrans.info_builder - LLM info parse failed, fallback to empty input
+2025-12-06 18:17:41 [INFO] crtrans.info_builder - Wrote info.md to temp/info.md
+2025-12-06 18:17:41 [INFO] crtrans.c2rust_wrapper - Wrote compile_commands.json at temp/compile_commands.json
+2025-12-06 18:17:41 [INFO] crtrans.c2rust_wrapper - Running c2rust: c2rust transpile --emit-build-files --output-dir temp/c2rust temp/compile_commands.json
+2025-12-06 18:17:41 [WARNING] crtrans.c_parser - libclang present but failed to initialize; using regex fallback
+2025-12-06 18:17:41 [WARNING] crtrans.c_parser - libclang unavailable; falling back to regex feature extraction
+2025-12-06 18:18:40 [INFO] __main__ - Using C file: /work/CRTrans/C/hello.c
+2025-12-06 18:18:40 [INFO] crtrans.info_builder - Compiling C: gcc -O0 /work/CRTrans/C/hello.c -o temp/c_binary
+2025-12-06 18:18:41 [INFO] crtrans.prompting - Calling DeepSeek with 358 tokens of messages
+2025-12-06 18:18:44 [WARNING] crtrans.info_builder - LLM info parse failed, fallback to empty input
+2025-12-06 18:18:44 [INFO] crtrans.info_builder - Wrote info.md to temp/info.md
+2025-12-06 18:18:44 [INFO] crtrans.c2rust_wrapper - Wrote compile_commands.json at temp/compile_commands.json
+2025-12-06 18:18:44 [INFO] crtrans.c2rust_wrapper - Running c2rust: c2rust transpile --emit-build-files --output-dir temp/c2rust temp/compile_commands.json
+2025-12-06 18:18:44 [WARNING] crtrans.c_parser - libclang present but failed to initialize; using regex fallback
+2025-12-06 18:18:44 [WARNING] crtrans.c_parser - libclang unavailable; falling back to regex feature extraction
+2025-12-06 18:18:44 [INFO] crtrans.prompting - Calling DeepSeek with 296 tokens of messages
+2025-12-06 18:18:46 [INFO] crtrans.prompting - Calling DeepSeek with 862 tokens of messages
+2025-12-06 18:18:48 [INFO] __main__ - Wrote assembled Rust to rust/translated.rs
+2025-12-06 18:18:48 [INFO] crtrans.rust_checker - Compiling Rust: rustc --edition 2021 rust/translated.rs -o rust/translated
+2025-12-06 18:18:48 [ERROR] crtrans.rust_checker - rustc failed:
+error: unknown start of token: `
+ --> rust/translated.rs:1:1
+  |
+1 | ```rust
+  | ^^^
+  |
+  = note: character appears 2 more times
+help: Unicode character '`' (Grave Accent) looks like ''' (Single Quote), but it is not
+  |
+1 - ```rust
+1 + '''rust
+  |
+
+error: unknown start of token: `
+ --> rust/translated.rs:5:1
+  |
+5 | ```
+  | ^^^
+  |
+  = note: character appears 2 more times
+help: Unicode character '`' (Grave Accent) looks like ''' (Single Quote), but it is not
+  |
+5 - ```
+5 + '''
+  |
+
+error: expected one of `!` or `::`, found keyword `fn`
+ --> rust/translated.rs:2:1
+  |
+1 | ```rust
+  |        - expected one of `!` or `::`
+2 | fn main() {
+  | ^^ unexpected token
+
+error: aborting due to 3 previous errors
+
+
+2025-12-06 18:18:48 [ERROR] __main__ - Rust compilation failed; inspect rust/translated.rs
+2025-12-06 18:20:10 [INFO] __main__ - Using C file: /work/CRTrans/C/hello.c
+2025-12-06 18:20:10 [INFO] crtrans.info_builder - Compiling C: gcc -O0 /work/CRTrans/C/hello.c -o temp/c_binary
+2025-12-06 18:20:11 [INFO] crtrans.prompting - Calling DeepSeek with 358 tokens of messages
+2025-12-06 18:20:14 [WARNING] crtrans.info_builder - LLM info parse failed, fallback to empty input
+2025-12-06 18:20:14 [INFO] crtrans.info_builder - Wrote info.md to temp/info.md
+2025-12-06 18:20:14 [INFO] crtrans.c2rust_wrapper - Wrote compile_commands.json at temp/compile_commands.json
+2025-12-06 18:20:14 [INFO] crtrans.c2rust_wrapper - Running c2rust: c2rust transpile --emit-build-files --output-dir temp/c2rust temp/compile_commands.json
+2025-12-06 18:20:14 [WARNING] crtrans.c_parser - libclang present but failed to initialize; using regex fallback
+2025-12-06 18:20:14 [WARNING] crtrans.c_parser - libclang unavailable; falling back to regex feature extraction
+2025-12-06 18:20:14 [INFO] crtrans.prompting - Calling DeepSeek with 296 tokens of messages
+2025-12-06 18:20:17 [INFO] crtrans.prompting - Calling DeepSeek with 862 tokens of messages
+2025-12-06 18:20:19 [INFO] __main__ - Wrote assembled Rust to rust/translated.rs
+2025-12-06 18:20:19 [INFO] crtrans.rust_checker - Compiling Rust: rustc --edition 2021 rust/translated.rs -o rust/translated
+2025-12-06 18:21:32 [INFO] __main__ - Using C file: /work/CRTrans/C/hello.c
+2025-12-06 18:21:32 [INFO] crtrans.info_builder - Compiling C: gcc -O0 /work/CRTrans/C/hello.c -o temp/c_binary
+2025-12-06 18:21:32 [INFO] crtrans.prompting - Calling DeepSeek with 358 tokens of messages
+2025-12-06 18:21:35 [WARNING] crtrans.info_builder - LLM info parse failed, fallback to empty input
+2025-12-06 18:21:35 [INFO] crtrans.info_builder - Wrote info.md to temp/info.md
+2025-12-06 18:21:35 [INFO] crtrans.c2rust_wrapper - Wrote compile_commands.json at temp/compile_commands.json
+2025-12-06 18:21:35 [INFO] crtrans.c2rust_wrapper - Running c2rust: c2rust transpile --emit-build-files --output-dir temp/c2rust temp/compile_commands.json
+2025-12-06 18:21:35 [WARNING] crtrans.c_parser - libclang present but failed to initialize; using regex fallback
+2025-12-06 18:21:35 [WARNING] crtrans.c_parser - libclang unavailable; falling back to regex feature extraction
+2025-12-06 18:21:35 [INFO] crtrans.prompting - Calling DeepSeek with 296 tokens of messages
+2025-12-06 18:21:37 [INFO] crtrans.prompting - Calling DeepSeek with 862 tokens of messages
+2025-12-06 18:21:40 [INFO] __main__ - Wrote assembled Rust to rust/translated.rs
+2025-12-06 18:21:40 [INFO] crtrans.rust_checker - Compiling Rust: rustc --edition 2021 rust/translated.rs -o rust/translated
+2025-12-06 18:21:40 [WARNING] __main__ - Output mismatches:
+Sample 1 mismatch: C stdout='hello world', Rust stdout='hello world\n', rc C=0, rc Rust=0
+2025-12-06 18:21:40 [INFO] __main__ - Saved final Rust to rust/hello.rs
+2025-12-06 18:55:42 [INFO] __main__ - Using C file: /work/CRTrans/C/test.c
+2025-12-06 18:55:42 [INFO] crtrans.info_builder - Compiling C: gcc -O0 /work/CRTrans/C/test.c -o temp/c_binary
+2025-12-06 18:55:43 [INFO] crtrans.prompting - Calling DeepSeek with 426 tokens of messages
+2025-12-06 18:55:46 [WARNING] crtrans.info_builder - LLM info parse failed, fallback to empty input
+2025-12-06 18:55:46 [INFO] crtrans.info_builder - Wrote info.md to temp/info.md
+2025-12-06 18:55:46 [INFO] crtrans.c2rust_wrapper - Wrote compile_commands.json at temp/compile_commands.json
+2025-12-06 18:55:46 [INFO] crtrans.c2rust_wrapper - Running c2rust: c2rust transpile --emit-build-files --output-dir temp/c2rust temp/compile_commands.json
+2025-12-06 18:55:46 [WARNING] crtrans.c_parser - libclang present but failed to initialize; using regex fallback
+2025-12-06 18:55:46 [WARNING] crtrans.c_parser - libclang unavailable; falling back to regex feature extraction
+2025-12-06 18:55:46 [INFO] crtrans.prompting - Calling DeepSeek with 299 tokens of messages
+2025-12-06 18:55:47 [WARNING] crtrans.translator - Signature parse failed, fallback to raw text
+2025-12-06 18:55:47 [INFO] crtrans.prompting - Calling DeepSeek with 1095 tokens of messages
+2025-12-06 18:55:49 [INFO] crtrans.prompting - Calling DeepSeek with 319 tokens of messages
+2025-12-06 18:55:52 [INFO] crtrans.prompting - Calling DeepSeek with 1144 tokens of messages
+2025-12-06 18:55:55 [INFO] __main__ - Wrote assembled Rust to rust/translated.rs
+2025-12-06 18:55:55 [INFO] crtrans.rust_checker - Compiling Rust: rustc --edition 2021 rust/translated.rs -o rust/translated
+2025-12-06 18:55:55 [ERROR] crtrans.rust_checker - rustc failed:
+error[E0428]: the name `add` is defined multiple times
+ --> rust/translated.rs:5:1
+  |
+1 | pub fn add(a: i32, b: i32) -> i32 {
+  | --------------------------------- previous definition of the value `add` here
+...
+5 | fn add(a: i32, b: i32) -> i32 {
+  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ `add` redefined here
+  |
+  = note: `add` must be defined only once in the value namespace of this module
+
+error[E0601]: `main` function not found in crate `translated`
+ --> rust/translated.rs:7:2
+  |
+7 | }
+  |  ^ consider adding a `main` function to `rust/translated.rs`
+
+error: aborting due to 2 previous errors
+
+Some errors have detailed explanations: E0428, E0601.
+For more information about an error, try `rustc --explain E0428`.
+
+2025-12-06 18:55:55 [ERROR] __main__ - Rust compilation failed; inspect rust/translated.rs

@@ -1,0 +1,7 @@
+[
+    {
+        "directory": "/work/CRTrans/C",
+        "command": "clang -O0 -c test.c -o test.o",
+        "file": "test.c"
+    }
+]

@@ -1,0 +1,14 @@
+Translate the C function below to Rust. Use the provided target signature exactly. Avoid unsafe unless necessary; prefer slices, references, and Result/Option. Use already translated callees when present. You may leverage the static hint from c2rust for type clues but clean up unsafe patterns.
+Target signature:
+{target_sig}
+
+C function:
+{c_function}
+
+Translated callees (signatures):
+{callee_sigs}
+
+Static hint (from c2rust, may be noisy):
+{static_hint}
+
+Respond with Rust code that starts with the target signature.

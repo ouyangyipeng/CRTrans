@@ -1,0 +1,4 @@
+Consider the following C function. Suggest up to 2 idiomatic Rust function signatures that preserve intent and prefer references over raw pointers when safe. Respond with JSON: {{"signatures": ["sig1", "sig2"]}}.
+
+C function:
+{c_function}
