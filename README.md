@@ -34,13 +34,13 @@ flowchart TD
 
 ## 目录与模块说明
 
-- `transpile.py`：CLI 入口，核心参数 `--c-file`、`--api-key`、`--max-fix-iters`（默认 10）；自动按源文件名建立 `temp/<safe_stem>/` 工作区，组装/修复均在该目录；仅最终成果落盘 `rust/<safe_stem>.rs`。
+- `transpile.py`：CLI 入口，核心参数 `--c-file`、`--api-key`、`--max-fix-iters`（默认 10）、`--turbo`（开启 DeepSeek 思考模式）；自动按源文件名建立 `temp/<safe_stem>/` 工作区，组装/修复均在该目录；仅最终成果落盘 `rust/<safe_stem>.rs`。
 - `crtrans/`
   - `logging_setup.py`：控制台 + 旋转文件日志，统一格式。
   - `c_parser.py`：优先加载 `/usr/lib/llvm-14/lib/libclang.so(.1)`（可用 `LIBCLANG_PATH` 覆盖）；成功则用 libclang 抽取函数/struct/enum/typedef/var 及调用依赖；失败自动 regex，零告警降级。
   - `c2rust_wrapper.py`：写 `compile_commands.json`，清理输出目录后调用 c2rust 生成静态 Rust hint（供类型参考）。
   - `info_builder.py`：调用 LLM 生成描述/样例并剥除 code fence，解析失败则确定性兜底；编译运行 C 收集样例输出，写入 `temp/<safe_stem>/info.md`；编译/运行失败会立即报错并终止。
-  - `prompting.py`：加载提示模板并调用 DeepSeek API。
+  - `prompting.py`：加载提示模板并调用 DeepSeek API（默认 `deepseek-reasoner`，基址 `https://api.deepseek.com`，temperature=0.0，可选思考模式）。
   - `translator.py`：签名候选解析（JSON/文本多级兜底）、函数翻译、组装去重；提示词收紧为“只返回代码”。
   - `rust_checker.py`：rustc 编译封装。
   - `runner.py`：运行二进制并比对 stdout/stderr/rc。
@@ -121,10 +121,12 @@ python transpile.py --c-file C/bubble_sort.c --api-key "$DEEPSEEK_KEY"
 # --work-dir <dir>   工作根目录，实际使用 <dir>/<safe_stem>/ 子目录，默认 temp
 # --rust-out <path>  覆盖中间 translated.rs 写入位置（默认在工作子目录）
 # --max-fix-iters 12 最小迭代预算，实际会按文件规模自适应上调（上限 50）
+# --turbo            开启 DeepSeek 思考模式（reasoning_content），更稳但更慢
 
 # 环境变量
 # LIBCLANG_PATH=...  指定 libclang 路径
 # ENABLE_LIBCLANG=1  强制使用 libclang（缺省自动探测 14 版路径）
+# DEEPSEEK_BASE_URL  如需自定义 API 基址（默认 https://api.deepseek.com）
 ```
 
 输出位置：
@@ -140,7 +142,7 @@ python transpile.py --c-file C/bubble_sort.c --api-key "$DEEPSEEK_KEY"
 - Python 3.10+，按 `requirements.txt` 安装（`requests`, `urllib3`, `clang`）。
 - libclang 14：默认使用 `/usr/lib/llvm-14/lib/libclang.so.1`，可经 `LIBCLANG_PATH` 覆盖。
 - Rust 工具链（2021 edition）与 `c2rust` 可执行需在 `PATH` 中。
-- DeepSeek API key 通过参数或环境变量提供。
+- DeepSeek API key 通过参数或环境变量提供；默认模型 `deepseek-reasoner`，temperature=0.0，支持思考模式（`--turbo` 或 `thinking` payload）。
 
 ## 局限与后续改进方向
 

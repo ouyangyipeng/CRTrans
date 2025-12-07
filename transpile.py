@@ -70,7 +70,9 @@ def compute_iteration_budget(c_path: Path, features: List[Feature], cli_max: int
     return budget
 
 
-def write_final_report(c_path: Path, rust_path: Path, prompt_dir: Path, api_key: str | None, work_dir: Path) -> None:
+def write_final_report(
+    c_path: Path, rust_path: Path, prompt_dir: Path, api_key: str | None, work_dir: Path, thinking: bool = False
+) -> None:
     prompt_file = prompt_dir / "final_judge_prompt.txt"
     prompt = load_prompt(prompt_file)
     c_code = c_path.read_text(encoding="utf-8")
@@ -82,7 +84,7 @@ def write_final_report(c_path: Path, rust_path: Path, prompt_dir: Path, api_key:
             "content": prompt.format(c_name=c_path.name, c_code=c_code, rust_name=rust_path.name, rust_code=rust_code),
         },
     ]
-    resp = call_deepseek(messages, api_key=api_key, max_tokens=2048)
+    resp = call_deepseek(messages, api_key=api_key, max_tokens=2048, thinking=thinking)
     report_path = work_dir / f"report_{c_path.stem}.md"
     work_dir.mkdir(parents=True, exist_ok=True)
     report_path.write_text(resp, encoding="utf-8")
@@ -96,6 +98,7 @@ def main() -> None:
     parser.add_argument("--work-dir", default="temp", help="Working directory root (per-file subdir will be created)")
     parser.add_argument("--rust-out", default=None, help="Optional override for intermediate translated file")
     parser.add_argument("--max-fix-iters", type=int, default=10, help="Max rustc+LLM fix iterations (syntax and output loops combined)")
+    parser.add_argument("--turbo", action="store_true", help="Enable DeepSeek thinking mode (turbo)")
     args = parser.parse_args()
 
     c_path = find_c_file(args.c_file)
@@ -116,7 +119,7 @@ def main() -> None:
     logger.info("Using C file: %s", c_path)
 
     prompt_dir = Path("prompt")
-    info_path, c_outputs = build_info(c_path, work_dir, prompt_dir, args.api_key)
+    info_path, c_outputs = build_info(c_path, work_dir, prompt_dir, args.api_key, thinking=args.turbo)
     samples = [o["input"] for o in c_outputs]
 
     compile_commands = work_dir / "compile_commands.json"
@@ -146,11 +149,19 @@ def main() -> None:
         if feat.name == "main":
             target_sig = "fn main()"
         else:
-            sigs = generate_signatures(feat, args.api_key, sig_prompt)
+            sigs = generate_signatures(feat, args.api_key, sig_prompt, thinking=args.turbo)
             target_sig = sigs[0] if sigs else f"fn {feat.name}() {{ unimplemented!() }}"
         chosen_sigs[feat.name] = target_sig
         callees = [chosen_sigs.get(dep, dep) for dep in feat.deps if dep in chosen_sigs]
-        rust_code = translate_function(feat, target_sig, callees, static_hint, args.api_key, translate_prompt)
+        rust_code = translate_function(
+            feat,
+            target_sig,
+            callees,
+            static_hint,
+            args.api_key,
+            translate_prompt,
+            thinking=args.turbo,
+        )
         if not rust_code.strip():
             rust_code = target_sig + " { unimplemented!(); }"
         translations[feat.name] = rust_code
@@ -178,6 +189,7 @@ def main() -> None:
             api_key=args.api_key,
             prompt_file=fix_prompt,
             max_tokens=6000,
+            thinking=args.turbo,
         )
         rust_out_path.write_text(fixed, encoding="utf-8")
         ok, stderr = compile_rust(rust_out_path)
@@ -205,6 +217,7 @@ def main() -> None:
             api_key=args.api_key,
             prompt_file=compare_fix_prompt,
             max_tokens=6000,
+            thinking=args.turbo,
         )
         rust_out_path.write_text(fixed, encoding="utf-8")
         ok, stderr = compile_rust(rust_out_path)
@@ -226,14 +239,16 @@ def main() -> None:
     final_target.write_text(final_code, encoding="utf-8")
     logger.info("Saved final Rust to %s", final_target)
 
-    write_final_report(c_path, final_target, prompt_dir, args.api_key, work_dir)
+    write_final_report(c_path, final_target, prompt_dir, args.api_key, work_dir, thinking=args.turbo)
 
 
 if __name__ == "__main__":
     main()
 
 
-def write_final_report(c_path: Path, rust_path: Path, prompt_dir: Path, api_key: str | None, work_dir: Path) -> None:
+def write_final_report(
+    c_path: Path, rust_path: Path, prompt_dir: Path, api_key: str | None, work_dir: Path, thinking: bool = False
+) -> None:
     prompt_file = prompt_dir / "final_judge_prompt.txt"
     prompt = load_prompt(prompt_file)
     c_code = c_path.read_text(encoding="utf-8")
@@ -245,7 +260,7 @@ def write_final_report(c_path: Path, rust_path: Path, prompt_dir: Path, api_key:
             "content": prompt.format(c_name=c_path.name, c_code=c_code, rust_name=rust_path.name, rust_code=rust_code),
         },
     ]
-    resp = call_deepseek(messages, api_key=api_key, max_tokens=2048)
+    resp = call_deepseek(messages, api_key=api_key, max_tokens=2048, thinking=thinking)
     report_path = work_dir / f"report_{c_path.stem}.md"
     work_dir.mkdir(parents=True, exist_ok=True)
     report_path.write_text(resp, encoding="utf-8")

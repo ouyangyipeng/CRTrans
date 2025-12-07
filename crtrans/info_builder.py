@@ -33,7 +33,7 @@ def _run_program(bin_path: Path, input_text: str, timeout: int = 5) -> Tuple[int
     return proc.returncode, proc.stdout.decode(), proc.stderr.decode()
 
 
-def ask_llm_for_info(c_source: str, api_key: str | None, prompt_file: Path) -> Tuple[str, List[str], str]:
+def ask_llm_for_info(c_source: str, api_key: str | None, prompt_file: Path, thinking: bool = False) -> Tuple[str, List[str], str]:
     prompt = load_prompt(prompt_file)
     messages = [
         {"role": "system", "content": "You are a senior systems engineer."},
@@ -42,7 +42,7 @@ def ask_llm_for_info(c_source: str, api_key: str | None, prompt_file: Path) -> T
             "content": prompt.format(c_source=c_source),
         },
     ]
-    resp = call_deepseek(messages, api_key=api_key, max_tokens=1024)
+    resp = call_deepseek(messages, api_key=api_key, max_tokens=1024, thinking=thinking)
     # Expect JSON lines with description + samples array + notes
     parsed = _parse_info_json(resp)
     if parsed:
@@ -72,7 +72,7 @@ def _parse_info_json(resp: str) -> Tuple[str, List[str], str] | None:
 
 
 def build_info(
-    c_path: Path, work_dir: Path, prompt_dir: Path, api_key: str | None
+    c_path: Path, work_dir: Path, prompt_dir: Path, api_key: str | None, thinking: bool = False
 ) -> tuple[Path, list[dict[str, str | int]]]:
     c_source = c_path.read_text(encoding="utf-8")
     bin_path = work_dir / "c_binary"
@@ -80,7 +80,7 @@ def build_info(
 
     compile_c(c_path, bin_path)
     prompt_file = prompt_dir / "info_prompt.txt"
-    desc, samples, notes = ask_llm_for_info(c_source, api_key, prompt_file)
+    desc, samples, notes = ask_llm_for_info(c_source, api_key, prompt_file, thinking=thinking)
 
     # Fallback sample when LLM does not provide one.
     if samples == [""]:

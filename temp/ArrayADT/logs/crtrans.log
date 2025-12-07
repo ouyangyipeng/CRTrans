@@ -1,0 +1,129 @@
+2025-12-07 13:29:34 [INFO] __main__ - Using C file: /work/CRTrans/C/github/ArrayADT.c
+2025-12-07 13:29:34 [INFO] crtrans.info_builder - Compiling C: gcc -O0 /work/CRTrans/C/github/ArrayADT.c -o temp/ArrayADT/c_binary
+2025-12-07 13:29:35 [INFO] crtrans.prompting - Calling DeepSeek with 1629 tokens of messages
+2025-12-07 13:29:39 [INFO] crtrans.info_builder - Wrote info.md to temp/ArrayADT/info.md
+2025-12-07 13:29:39 [INFO] crtrans.c2rust_wrapper - Wrote compile_commands.json at temp/ArrayADT/compile_commands.json
+2025-12-07 13:29:39 [INFO] crtrans.c2rust_wrapper - Running c2rust: c2rust transpile --emit-build-files --output-dir temp/ArrayADT/c2rust temp/ArrayADT/compile_commands.json
+2025-12-07 13:29:40 [INFO] __main__ - Iteration budget set to 12 (lines=61, chunks=6, cli_min=10)
+2025-12-07 13:29:40 [INFO] crtrans.prompting - Calling DeepSeek with 576 tokens of messages
+2025-12-07 13:29:43 [INFO] crtrans.prompting - Calling DeepSeek with 3664 tokens of messages
+2025-12-07 13:29:46 [INFO] crtrans.prompting - Calling DeepSeek with 420 tokens of messages
+2025-12-07 13:29:49 [INFO] crtrans.prompting - Calling DeepSeek with 3466 tokens of messages
+2025-12-07 13:29:53 [INFO] crtrans.prompting - Calling DeepSeek with 486 tokens of messages
+2025-12-07 13:29:53 [INFO] crtrans.prompting - Calling DeepSeek with 3539 tokens of messages
+2025-12-07 13:29:59 [INFO] crtrans.prompting - Calling DeepSeek with 364 tokens of messages
+2025-12-07 13:30:02 [INFO] crtrans.prompting - Calling DeepSeek with 3427 tokens of messages
+2025-12-07 13:30:05 [INFO] crtrans.prompting - Calling DeepSeek with 407 tokens of messages
+2025-12-07 13:30:08 [INFO] crtrans.prompting - Calling DeepSeek with 3462 tokens of messages
+2025-12-07 13:30:12 [INFO] crtrans.prompting - Calling DeepSeek with 3818 tokens of messages
+2025-12-07 13:30:25 [INFO] __main__ - Wrote assembled Rust to temp/ArrayADT/translated.rs
+2025-12-07 13:30:25 [INFO] crtrans.rust_checker - Compiling Rust: rustc --edition 2021 temp/ArrayADT/translated.rs -o temp/ArrayADT/translated
+2025-12-07 13:30:25 [ERROR] crtrans.rust_checker - rustc failed:
+error[E0412]: cannot find type `myArray` in this scope
+  --> temp/ArrayADT/translated.rs:43:12
+   |
+43 | fn get(a: &myArray, n: usize) {
+   |            ^^^^^^^ help: a struct with a similar name exists: `MyArray`
+...
+56 | struct MyArray {
+   | -------------- similarly named struct `MyArray` defined here
+
+warning: unused import: `self`
+  --> temp/ArrayADT/translated.rs:53:15
+   |
+53 | use std::io::{self, Write};
+   |               ^^^^
+   |
+   = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+error[E0609]: no field `ptr` on type `&mut MyArray`
+ --> temp/ArrayADT/translated.rs:4:7
+  |
+4 |     a.ptr = vec![0; t_size].into_boxed_slice();
+  |       ^^^ unknown field
+  |
+  = note: available fields are: `total_size`, `used_size`, `data`
+
+error[E0609]: no field `ptr` on type `&MyArray`
+ --> temp/ArrayADT/translated.rs:8:30
+  |
+8 |     if a.used_size <= 0 || a.ptr.is_null() {
+  |                              ^^^ unknown field
+  |
+  = note: available fields are: `total_size`, `used_size`, `data`
+
+error[E0609]: no field `ptr` on type `&MyArray`
+  --> temp/ArrayADT/translated.rs:12:55
+   |
+12 |     let slice = unsafe { std::slice::from_raw_parts(a.ptr, a.used_size as usize) };
+   |                                                       ^^^ unknown field
+   |
+   = note: available fields are: `total_size`, `used_size`, `data`
+
+error[E0609]: no field `ptr` on type `&mut MyArray`
+  --> temp/ArrayADT/translated.rs:29:15
+   |
+29 |             a.ptr[i] = n;
+   |               ^^^ unknown field
+   |
+   = note: available fields are: `total_size`, `used_size`, `data`
+
+error[E0609]: no field `ptr` on type `&mut MyArray`
+  --> temp/ArrayADT/translated.rs:32:15
+   |
+32 |             a.ptr[i] = 0;
+   |               ^^^ unknown field
+   |
+   = note: available fields are: `total_size`, `used_size`, `data`
+
+error[E0609]: no field `ptr` on type `&mut MyArray`
+  --> temp/ArrayADT/translated.rs:39:11
+   |
+39 |         a.ptr[index] = 32;
+   |           ^^^ unknown field
+   |
+   = note: available fields are: `total_size`, `used_size`, `data`
+
+warning: unused import: `Write`
+  --> temp/ArrayADT/translated.rs:53:21
+   |
+53 | use std::io::{self, Write};
+   |                     ^^^^^
+
+error: aborting due to 7 previous errors; 2 warnings emitted
+
+Some errors have detailed explanations: E0412, E0609.
+For more information about an error, try `rustc --explain E0412`.
+
+2025-12-07 13:30:25 [WARNING] __main__ - rustc failed; invoking LLM fix iteration 1
+2025-12-07 13:30:25 [INFO] crtrans.prompting - Calling DeepSeek with 4688 tokens of messages
+2025-12-07 13:30:49 [INFO] crtrans.rust_checker - Compiling Rust: rustc --edition 2021 temp/ArrayADT/translated.rs -o temp/ArrayADT/translated
+2025-12-07 13:30:49 [ERROR] crtrans.rust_checker - rustc failed:
+error[E0599]: no method named `flush` found for struct `Stdout` in the current scope
+    --> temp/ArrayADT/translated.rs:29:22
+     |
+  29 |         io::stdout().flush().unwrap();
+     |                      ^^^^^ method not found in `Stdout`
+     |
+    ::: /root/.rustup/toolchains/stable-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/std/src/io/mod.rs:1801:8
+     |
+1801 |     fn flush(&mut self) -> Result<()>;
+     |        ----- the method is available for `Stdout` here
+     |
+     = help: items from traits can only be used if the trait is in scope
+help: trait `Write` which provides `flush` is implemented but not in scope; perhaps you want to import it
+     |
+   1 + use std::io::Write;
+     |
+
+error: aborting due to 1 previous error
+
+For more information about this error, try `rustc --explain E0599`.
+
+2025-12-07 13:30:49 [WARNING] __main__ - rustc failed; invoking LLM fix iteration 2
+2025-12-07 13:30:49 [INFO] crtrans.prompting - Calling DeepSeek with 2922 tokens of messages
+2025-12-07 13:31:03 [INFO] crtrans.rust_checker - Compiling Rust: rustc --edition 2021 temp/ArrayADT/translated.rs -o temp/ArrayADT/translated
+2025-12-07 13:31:04 [INFO] __main__ - Outputs match for provided samples
+2025-12-07 13:31:04 [INFO] __main__ - Saved final Rust to rust/ArrayADT.rs
+2025-12-07 13:31:04 [INFO] crtrans.prompting - Calling DeepSeek with 3588 tokens of messages
+2025-12-07 13:31:32 [INFO] __main__ - Wrote final equivalence report to temp/ArrayADT/report_ArrayADT.md

@@ -12,14 +12,14 @@ from .c_parser import Feature
 logger = logging.getLogger(__name__)
 
 
-def generate_signatures(feature: Feature, api_key: str | None, prompt_file: Path) -> List[str]:
+def generate_signatures(feature: Feature, api_key: str | None, prompt_file: Path, thinking: bool = False) -> List[str]:
     prompt = load_prompt(prompt_file)
     messages = [
         {"role": "system", "content": "You are an expert Rust engineer."},
         {"role": "user", "content": prompt.format(c_function=feature.code)},
     ]
     messages[-1]["content"] += "\n\n只返回 Rust 函数签名纯文本，不要解释，不要 Markdown 代码块。"
-    resp = call_deepseek(messages, api_key=api_key, max_tokens=512)
+    resp = call_deepseek(messages, api_key=api_key, max_tokens=512, thinking=thinking)
     return _parse_signatures(resp, feature.name)
 
 
@@ -31,6 +31,7 @@ def translate_function(
     api_key: str | None,
     prompt_file: Path,
     max_tokens: int | None = None,
+    thinking: bool = False,
 ) -> str:
     prompt = load_prompt(prompt_file)
     token_budget = max_tokens or _estimate_max_tokens(feature.code)
@@ -45,7 +46,7 @@ def translate_function(
         {"role": "system", "content": "Translate C to idiomatic safe Rust with minimal unsafe."},
         {"role": "user", "content": user_content},
     ]
-    resp = call_deepseek(messages, api_key=api_key, max_tokens=token_budget)
+    resp = call_deepseek(messages, api_key=api_key, max_tokens=token_budget, thinking=thinking)
     return _extract_rust_code(resp)
 
 

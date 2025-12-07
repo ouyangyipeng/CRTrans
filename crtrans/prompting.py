@@ -13,7 +13,7 @@ import requests
 logger = logging.getLogger(__name__)
 
 DEEPSEEK_URL = "https://api.deepseek.com/v1/chat/completions"
-DEFAULT_MODEL = "deepseek-chat"
+DEFAULT_MODEL = "deepseek-reasoner"
 
 
 def load_prompt(path: Path) -> str:
@@ -24,10 +24,11 @@ def call_deepseek(
     messages: List[Dict[str, str]],
     api_key: str | None = None,
     model: str = DEFAULT_MODEL,
-    temperature: float = 0.2,
+    temperature: float = 0.0,
     max_tokens: int = 2048,
     max_retries: int = 3,
     timeout: float | tuple[float, float] = (20, 240),
+    thinking: bool = False,
 ) -> str:
     key = api_key or os.getenv("DEEPSEEK_API_KEY")
     if not key:
@@ -39,6 +40,8 @@ def call_deepseek(
         "temperature": temperature,
         "max_tokens": max_tokens,
     }
+    if thinking:
+        payload["thinking"] = {"type": "enabled"}
 
     headers = {
         "Content-Type": "application/json",

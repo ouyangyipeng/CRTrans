@@ -1,0 +1,7 @@
+[
+    {
+        "directory": "/work/CRTrans/C/github",
+        "command": "clang -O0 -c \"ArrayADT.c\" -o \"ArrayADT.o\"",
+        "file": "ArrayADT.c"
+    }
+]

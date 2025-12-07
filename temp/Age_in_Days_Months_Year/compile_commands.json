@@ -1,0 +1,7 @@
+[
+    {
+        "directory": "/work/CRTrans/C/github",
+        "command": "clang -O0 -c \"Age_in_Days_Months_Year.c\" -o \"Age_in_Days_Months_Year.o\"",
+        "file": "Age_in_Days_Months_Year.c"
+    }
+]
