@@ -16,47 +16,47 @@
 
 ```mermaid
 flowchart TD
-   A[选择单个 C 文件] --> B[生成 compile_commands.json]
-   B --> C[c2rust 生成静态 hint]
-   A --> D[info.md: LLM 描述+样例; 运行 C 获取参考输出]
-   A --> E[解析 C: libclang or regex 提取函数/依赖]
-   E --> F[按拓扑序遍历特征]
-   F --> G[签名候选生成 (LLM)]
-   G --> H[函数翻译 (LLM, 结合 callees + static hint)]
-   H --> I[组装 Rust 文件]
-   I --> J[rustc 编译循环 (LLM 修复)]
-   J --> K[运行 Rust 样例输出]
-   K --> L[与 C 输出比对]
-   L -->|不一致| H
-   L -->|一致| M[保存最终 Rust]
-   M --> N[最终 LLM 等价性审查，生成报告]
+  A[选择单个 C 文件] --> B[生成 compile_commands.json]
+  A --> C[info.md: LLM 描述与样例, 运行 C 得输出]
+  A --> D[解析 C: libclang / regex]
+  B --> E[c2rust 生成静态 hint]
+  D --> F[按依赖拓扑遍历特征]
+  F --> G[签名候选生成]
+  G --> H[函数翻译 (结合 callees + hint)]
+  H --> I[组装 Rust 文件]
+  I --> J[rustc 编译循环]
+  J --> K[运行 Rust 样例输出]
+  K --> L[与 C 输出比对]
+  L -->|不一致| H
+  L -->|一致| M[保存最终 Rust]
+  M --> N[最终 LLM 等价性审查报告]
 ```
 
-## 目录与模块说明（逐模块细节）
+## 目录与模块说明
 
-- `transpile.py`：CLI 入口，参数含 `--c-file`、`--work-dir`、`--rust-out`、`--api-key`、`--max-fix-iters`（默认 10）；串联解析、翻译、双循环修复与最终审查。
+- `transpile.py`：CLI 入口，核心参数 `--c-file`、`--api-key`、`--max-fix-iters`（默认 10）；自动按源文件名建立 `temp/<safe_stem>/` 工作区，组装/修复均在该目录；仅最终成果落盘 `rust/<safe_stem>.rs`。
 - `crtrans/`
   - `logging_setup.py`：控制台 + 旋转文件日志，统一格式。
   - `c_parser.py`：优先加载 `/usr/lib/llvm-14/lib/libclang.so(.1)`（可用 `LIBCLANG_PATH` 覆盖）；成功则用 libclang 抽取函数/struct/enum/typedef/var 及调用依赖；失败自动 regex，零告警降级。
   - `c2rust_wrapper.py`：写 `compile_commands.json`，清理输出目录后调用 c2rust 生成静态 Rust hint（供类型参考）。
-  - `info_builder.py`：调用 LLM 生成描述/样例并剥除 code fence，解析失败则确定性兜底；编译运行 C 收集样例输出，写入 `temp/info.md`。
+  - `info_builder.py`：调用 LLM 生成描述/样例并剥除 code fence，解析失败则确定性兜底；编译运行 C 收集样例输出，写入 `temp/<safe_stem>/info.md`；编译/运行失败会立即报错并终止。
   - `prompting.py`：加载提示模板并调用 DeepSeek API。
-  - `translator.py`：签名候选解析（JSON/文本多级兜底）、函数翻译、组装去重。
+  - `translator.py`：签名候选解析（JSON/文本多级兜底）、函数翻译、组装去重；提示词收紧为“只返回代码”。
   - `rust_checker.py`：rustc 编译封装。
   - `runner.py`：运行二进制并比对 stdout/stderr/rc。
 - `prompt/`：分模块提示，包括 info、签名、翻译、rustc 修复、输出修复、最终审查等。
-- `temp/`：中间产物与日志、最终审查报告 `report_<cfile>.md`。
-- `rust/`：最终 Rust 输出副本。
+- `temp/`：每个输入对应 `temp/<safe_stem>/`，包含中间产物（翻译稿、二进制、info、c2rust、日志、最终审查报告）。
+- `rust/`：仅保存最终收敛的 Rust 副本。
 
-## 详细流水线步骤（展开版）
+## 详细流水线步骤
 
 1. **输入定位与准备**
   - CLI 解析 `--c-file`；缺省时要求 `C/` 仅有一个 `.c`。
-  - 构建 `compile_commands.json`（O0），为 c2rust 与 libclang 提供统一编译上下文。
+  - 构建 `compile_commands.json`（O0），为 c2rust 与 libclang 提供统一编译上下文；文件名与输出名加引号并安全化，兼容空格。
 2. **信息与样例生成（`info_builder`）**
   - 向 LLM 发送源码与 `info_prompt`，期望 JSON（description/samples/notes），剥除 Markdown fence 后解析。
   - 解析失败的确定性兜底：填充固定描述与最小样例，保证后续可运行。
-  - 编译并运行 C，逐一喂入样例，记录 stdout/stderr/rc，写入 `temp/info.md` 作为对照输出。
+  - 编译并运行 C，逐一喂入样例，记录 stdout/stderr/rc，写入 `temp/<safe_stem>/info.md` 作为对照输出；运行失败即停止。
 3. **静态迁移提示（`c2rust_wrapper`）**
   - 清理输出目录，调用 c2rust 生成静态 Rust hint（可能含 unsafe），用作类型/签名参考但不直接信任。
 4. **特征抽取与依赖排序（`c_parser`）**
@@ -64,24 +64,24 @@ flowchart TD
   - libclang 不可用自动 regex，零告警降级。
   - 构建调用依赖图，做简易拓扑排序，保证翻译时已有 callee 签名可用。
 5. **签名候选生成（`translator.generate_signatures`）**
-  - 结合 c2rust hint 和推荐指针映射，要求 LLM 返回 1~2 个惯用 Rust 签名。
+  - 结合 c2rust hint 和推荐指针映射，要求 LLM 返回 1~2 个惯用 Rust 签名（仅返回纯文本）。
   - 解析链：去 fence → 尝试 JSON → 从文本提取 `fn ...` → 兜底空签名，避免“parse failed”终止。
 6. **函数体翻译（`translator.translate_function`）**
   - 上下文包含目标签名、callee 签名列表、静态 hint、原 C 代码。
-  - 提示强调少 unsafe、偏向引用/切片/Result/Option；返回体剥除 Markdown fence。
+  - 提示强调少 unsafe、偏向引用/切片/Result/Option；提示强制“只返回 Rust 代码”，自动剥除 fence/语言标签。
   - 逐函数累积翻译结果，重复函数名会在组装阶段去重。
 7. **组装与去重（`translator.assemble_rust`）**
   - 按拓扑序拼接函数与定义，缺失则填编译可过的 stub。
   - `_dedup_functions`：重复 `fn name` 仅保留首个版本，避免重复定义导致 rustc 失败。
 8. **语法/类型修复循环（`rust_checker` + `fix_prompt`）**
-  - 编译 `rust/translated.rs`；若 rustc 报错，将错误与源码送入 LLM 生成修订版并重编译。
-  - 循环上限 `--max-fix-iters=10`，确保编译通过后再进入语义比对。
+  - 编译 `temp/<safe_stem>/translated.rs`；若 rustc 报错，将错误与源码送入 LLM 生成修订版并重编译。
+  - 循环上限 `--max-fix-iters=10`（可按文件规模自适应上调），确保编译通过后再进入语义比对。
 9. **语义/IO 比对循环（`runner` + `compare_fix_prompt`）**
   - 使用 `info.md` 样例运行 C/Rust，比较 stdout/rc。
-  - 不一致则携差异提示 LLM 修复，再编译再比对；语义循环共享同一个 10 次预算，编译失败会被优先解决。
+  - 不一致则携差异提示 LLM 修复，再编译再比对；语义循环与语法循环共用统一预算，编译失败优先；差异详情仅写入日志文件（debug），控制台保持简洁。
 10. **产出与归档**
-  - 最终可编译版写入 `rust/<cfile>.rs`（同时保留 `rust/translated.rs`）。
-  - 触发最终等价性审查：将 C/Rust 全量代码与 `final_judge_prompt` 交给 LLM，生成 Markdown 报告 `temp/report_<cfile>.md`，仅供审阅，不改代码。
+  - 最终可编译版写入 `rust/<safe_stem>.rs`（中间稿留在 `temp/<safe_stem>/`）。
+  - 触发最终等价性审查：将 C/Rust 全量代码与 `final_judge_prompt` 交给 LLM，生成 Markdown 报告 `temp/<safe_stem>/report_<safe_stem>.md`，仅供审阅，不改代码。
 
 ## 关键技术要点（展开）
 
@@ -104,12 +104,12 @@ flowchart TD
 ```
 
 输出位置：
-- `rust/translated.rs`：当前迭代的 assembled Rust。
-- `rust/<cfile>.rs`：收敛后的最终副本。
-- `temp/info.md`：描述 + 样例输入输出。
-- `temp/c2rust/`：c2rust 静态提示。
-- `temp/report_<cfile>.md`：最终 LLM 等价性审查报告。
-- `temp/logs/crtrans.log`：运行日志。
+- `temp/<safe_stem>/translated.rs`：当前迭代的 assembled Rust。
+- `rust/<safe_stem>.rs`：收敛后的最终副本。
+- `temp/<safe_stem>/info.md`：描述 + 样例输入输出。
+- `temp/<safe_stem>/c2rust/`：c2rust 静态提示。
+- `temp/<safe_stem>/report_<safe_stem>.md`：最终 LLM 等价性审查报告。
+- `temp/<safe_stem>/logs/crtrans.log`：运行日志，含详细 diff（debug）。
 
 ## 依赖与环境
 

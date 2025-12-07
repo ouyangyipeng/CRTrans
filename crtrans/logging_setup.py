@@ -19,9 +19,11 @@ def setup_logging(log_dir: Path, level: str = "INFO") -> None:
     )
 
     ch = logging.StreamHandler()
+    ch.setLevel(getattr(logging, level.upper(), logging.INFO))
     ch.setFormatter(formatter)
     logger.addHandler(ch)
 
     fh = RotatingFileHandler(logfile, maxBytes=2 * 1024 * 1024, backupCount=3)
+    fh.setLevel(logging.DEBUG)  # capture verbose details in file only
     fh.setFormatter(formatter)
     logger.addHandler(fh)

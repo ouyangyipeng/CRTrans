@@ -93,8 +93,8 @@ def main() -> None:
     parser = argparse.ArgumentParser(description="C to Rust transpilation orchestrator")
     parser.add_argument("--c-file", help="Path to C file", default=None)
     parser.add_argument("--api-key", help="DeepSeek API key", default=None)
-    parser.add_argument("--work-dir", default="temp", help="Working directory for intermediates")
-    parser.add_argument("--rust-out", default="rust/translated.rs", help="Final rust output file")
+    parser.add_argument("--work-dir", default="temp", help="Working directory root (per-file subdir will be created)")
+    parser.add_argument("--rust-out", default=None, help="Optional override for intermediate translated file")
     parser.add_argument("--max-fix-iters", type=int, default=10, help="Max rustc+LLM fix iterations (syntax and output loops combined)")
     args = parser.parse_args()
 
@@ -156,10 +156,8 @@ def main() -> None:
         translations[feat.name] = rust_code
 
     assembled = assemble_rust(features, translations)
-    rust_out_path = Path(args.rust_out)
-    # Make rust_out_path unique per input to avoid cross-run clobbering
-    if rust_out_path.name == "translated.rs":
-        rust_out_path = rust_out_path.with_name(f"translated_{safe_stem}.rs")
+    # Intermediate translated artifact stays within the per-file work_dir by default
+    rust_out_path = Path(args.rust_out) if args.rust_out else work_dir / "translated.rs"
     rust_out_path.parent.mkdir(parents=True, exist_ok=True)
     rust_out_path.write_text(assembled, encoding="utf-8")
     logger.info("Wrote assembled Rust to %s", rust_out_path)
@@ -195,7 +193,7 @@ def main() -> None:
     while diffs and (iter_idx + iter_cmp) < iteration_budget:
         logger.info("Output mismatches detected; invoking LLM fix iteration %d", iter_cmp + 1)
         for d in diffs:
-            logger.warning(d)
+            logger.debug(d)
         iter_cmp += 1
         current = rust_out_path.read_text(encoding="utf-8")
         diff_text = "\n".join(diffs)
