@@ -1,0 +1,9 @@
+2025-12-07 10:20:43 [INFO] __main__ - Using C file: /work/CRTrans/C/github/binary_search_tree.c
+2025-12-07 10:20:43 [INFO] crtrans.info_builder - Compiling C: gcc -O0 /work/CRTrans/C/github/binary_search_tree.c -o temp/binary_search_tree/c_binary
+2025-12-07 10:20:43 [INFO] crtrans.prompting - Calling DeepSeek with 5530 tokens of messages
+2025-12-07 10:20:48 [INFO] crtrans.info_builder - Wrote info.md to temp/binary_search_tree/info.md
+2025-12-07 10:20:48 [INFO] crtrans.c2rust_wrapper - Wrote compile_commands.json at temp/binary_search_tree/compile_commands.json
+2025-12-07 10:20:48 [INFO] crtrans.c2rust_wrapper - Running c2rust: c2rust transpile --emit-build-files --output-dir temp/binary_search_tree/c2rust temp/binary_search_tree/compile_commands.json
+2025-12-07 10:20:48 [INFO] __main__ - Iteration budget set to 16 (lines=248, chunks=12, cli_min=10)
+2025-12-07 10:20:48 [INFO] crtrans.prompting - Calling DeepSeek with 358 tokens of messages
+2025-12-07 10:20:51 [INFO] crtrans.prompting - Calling DeepSeek with 10624 tokens of messages

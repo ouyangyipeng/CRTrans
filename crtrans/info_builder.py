@@ -3,6 +3,7 @@ from __future__ import annotations
 import json
 import logging
 import subprocess
+from subprocess import CalledProcessError
 from pathlib import Path
 from typing import List, Tuple
 
@@ -14,7 +15,11 @@ logger = logging.getLogger(__name__)
 def compile_c(c_path: Path, output: Path) -> None:
     cmd = ["gcc", "-O0", str(c_path), "-o", str(output)]
     logger.info("Compiling C: %s", " ".join(cmd))
-    subprocess.run(cmd, check=True)
+    try:
+        subprocess.run(cmd, check=True, capture_output=True, text=True)
+    except CalledProcessError as exc:  # noqa: BLE001
+        msg = exc.stderr or exc.stdout or str(exc)
+        raise RuntimeError(f"C compilation failed: {msg}") from exc
 
 
 def _run_program(bin_path: Path, input_text: str, timeout: int = 5) -> Tuple[int, str, str]:
@@ -82,8 +87,10 @@ def build_info(
         samples = ["5\n5 4 3 2 1\n"]
 
     outputs = []
-    for sample in samples:
+    for idx, sample in enumerate(samples, 1):
         rc, out, err = _run_program(bin_path, sample)
+        if rc != 0:
+            raise RuntimeError(f"C program failed on sample {idx} (rc={rc}): {err or out}")
         outputs.append({"input": sample, "returncode": rc, "stdout": out, "stderr": err})
 
     info_path = work_dir / "info.md"

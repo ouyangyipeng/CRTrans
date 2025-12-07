@@ -1,0 +1,7 @@
+[
+    {
+        "directory": "/work/CRTrans/C/github",
+        "command": "clang -O0 -c binary_search_tree.c -o binary_search_tree.o",
+        "file": "binary_search_tree.c"
+    }
+]

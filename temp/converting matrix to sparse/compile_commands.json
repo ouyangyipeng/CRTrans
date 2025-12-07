@@ -1,0 +1,7 @@
+[
+    {
+        "directory": "/work/CRTrans/C/github",
+        "command": "clang -O0 -c converting matrix to sparse.c -o converting matrix to sparse.o",
+        "file": "converting matrix to sparse.c"
+    }
+]

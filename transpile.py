@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import argparse
 import logging
+import re
 from pathlib import Path
 from typing import Dict, List
 
@@ -27,6 +28,10 @@ def find_c_file(c_arg: str | None) -> Path:
     if len(candidates) != 1:
         raise RuntimeError("Provide --c-file or keep exactly one .c file in C/")
     return candidates[0].resolve()
+
+
+def _safe_name(name: str) -> str:
+    return re.sub(r"[^A-Za-z0-9_]+", "_", name)
 
 
 def pick_static_hint(output_dir: Path) -> str:
@@ -93,11 +98,21 @@ def main() -> None:
     parser.add_argument("--max-fix-iters", type=int, default=10, help="Max rustc+LLM fix iterations (syntax and output loops combined)")
     args = parser.parse_args()
 
-    work_dir = Path(args.work_dir)
+    c_path = find_c_file(args.c_file)
+    safe_stem = _safe_name(c_path.stem)
+    work_dir = Path(args.work_dir) / safe_stem
+    if work_dir.exists():
+        # Clean previous artifacts for isolation
+        for child in work_dir.iterdir():
+            if child.is_file():
+                child.unlink(missing_ok=True)
+            else:
+                import shutil
+
+                shutil.rmtree(child, ignore_errors=True)
     log_dir = work_dir / "logs"
     setup_logging(log_dir)
 
-    c_path = find_c_file(args.c_file)
     logger.info("Using C file: %s", c_path)
 
     prompt_dir = Path("prompt")
@@ -142,6 +157,9 @@ def main() -> None:
 
     assembled = assemble_rust(features, translations)
     rust_out_path = Path(args.rust_out)
+    # Make rust_out_path unique per input to avoid cross-run clobbering
+    if rust_out_path.name == "translated.rs":
+        rust_out_path = rust_out_path.with_name(f"translated_{safe_stem}.rs")
     rust_out_path.parent.mkdir(parents=True, exist_ok=True)
     rust_out_path.write_text(assembled, encoding="utf-8")
     logger.info("Wrote assembled Rust to %s", rust_out_path)
@@ -176,6 +194,8 @@ def main() -> None:
     iter_cmp = 0
     while diffs and (iter_idx + iter_cmp) < iteration_budget:
         logger.info("Output mismatches detected; invoking LLM fix iteration %d", iter_cmp + 1)
+        for d in diffs:
+            logger.warning(d)
         iter_cmp += 1
         current = rust_out_path.read_text(encoding="utf-8")
         diff_text = "\n".join(diffs)
@@ -203,7 +223,7 @@ def main() -> None:
         logger.info("Outputs match for provided samples")
 
     final_code = rust_out_path.read_text(encoding="utf-8")
-    final_target = Path("rust") / c_path.with_suffix(".rs").name
+    final_target = Path("rust") / f"{safe_stem}.rs"
     final_target.parent.mkdir(parents=True, exist_ok=True)
     final_target.write_text(final_code, encoding="utf-8")
     logger.info("Saved final Rust to %s", final_target)

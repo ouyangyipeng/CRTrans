@@ -18,6 +18,7 @@ def generate_signatures(feature: Feature, api_key: str | None, prompt_file: Path
         {"role": "system", "content": "You are an expert Rust engineer."},
         {"role": "user", "content": prompt.format(c_function=feature.code)},
     ]
+    messages[-1]["content"] += "\n\n只返回 Rust 函数签名纯文本，不要解释，不要 Markdown 代码块。"
     resp = call_deepseek(messages, api_key=api_key, max_tokens=512)
     return _parse_signatures(resp, feature.name)
 
@@ -33,17 +34,16 @@ def translate_function(
 ) -> str:
     prompt = load_prompt(prompt_file)
     token_budget = max_tokens or _estimate_max_tokens(feature.code)
+    user_content = prompt.format(
+        target_sig=target_sig,
+        c_function=feature.code,
+        callee_sigs="\n".join(callee_sigs),
+        static_hint=static_hint,
+    )
+    user_content += "\n\n只返回 Rust 代码，禁止 Markdown、解释或列表。"
     messages = [
         {"role": "system", "content": "Translate C to idiomatic safe Rust with minimal unsafe."},
-        {
-            "role": "user",
-            "content": prompt.format(
-                target_sig=target_sig,
-                c_function=feature.code,
-                callee_sigs="\n".join(callee_sigs),
-                static_hint=static_hint,
-            ),
-        },
+        {"role": "user", "content": user_content},
     ]
     resp = call_deepseek(messages, api_key=api_key, max_tokens=token_budget)
     return _extract_rust_code(resp)

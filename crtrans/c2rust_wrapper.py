@@ -12,7 +12,7 @@ def write_compile_commands(c_file: Path, compile_commands: Path) -> None:
     compile_commands.parent.mkdir(parents=True, exist_ok=True)
     entry = {
         "directory": str(c_file.parent.resolve()),
-        "command": f"clang -O0 -c {c_file.name} -o {c_file.stem}.o",
+        "command": f"clang -O0 -c \"{c_file.name}\" -o \"{c_file.stem}.o\"",
         "file": c_file.name,
     }
     compile_commands.write_text(json.dumps([entry], indent=4), encoding="utf-8")

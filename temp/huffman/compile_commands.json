@@ -1,0 +1,7 @@
+[
+    {
+        "directory": "/work/CRTrans/C/github",
+        "command": "clang -O0 -c \"huffman.c\" -o \"huffman.o\"",
+        "file": "huffman.c"
+    }
+]

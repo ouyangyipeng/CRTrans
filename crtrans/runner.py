@@ -35,6 +35,11 @@ def compare_outputs(c_outputs: List[Dict[str, str]], r_outputs: List[Dict[str, s
         r_rc = str(r_out.get("rc", r_out.get("returncode", "")))
         if c_out.get("stdout") != r_out.get("stdout") or c_rc != r_rc:
             diffs.append(
-                f"Sample {i+1} mismatch: C stdout={c_out.get('stdout')!r}, Rust stdout={r_out.get('stdout')!r}, rc C={c_rc}, rc Rust={r_rc}"
+                (
+                    f"Sample {i+1} mismatch:\n"
+                    f"  input: {c_out.get('input')!r}\n"
+                    f"  C   -> rc={c_rc}, stdout={c_out.get('stdout')!r}, stderr={c_out.get('stderr')!r}\n"
+                    f"  Rust-> rc={r_rc}, stdout={r_out.get('stdout')!r}, stderr={r_out.get('stderr')!r}"
+                )
             )
     return diffs

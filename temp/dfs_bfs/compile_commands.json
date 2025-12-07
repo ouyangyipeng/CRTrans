@@ -1,0 +1,7 @@
+[
+    {
+        "directory": "/work/CRTrans/C/github",
+        "command": "clang -O0 -c dfs_bfs.c -o dfs_bfs.o",
+        "file": "dfs_bfs.c"
+    }
+]
