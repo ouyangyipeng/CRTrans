@@ -16,20 +16,20 @@
 
 ```mermaid
 flowchart TD
-  A[选择单个 C 文件] --> B[生成 compile_commands.json]
-  A --> C[info.md: LLM 描述与样例, 运行 C 得输出]
-  A --> D[解析 C: libclang / regex]
-  B --> E[c2rust 生成静态 hint]
-  D --> F[按依赖拓扑遍历特征]
-  F --> G[签名候选生成]
-  G --> H[函数翻译 (结合 callees + hint)]
-  H --> I[组装 Rust 文件]
-  I --> J[rustc 编译循环]
-  J --> K[运行 Rust 样例输出]
-  K --> L[与 C 输出比对]
+  A["选择单个 C 文件"] --> B["生成 compile_commands.json"]
+  A --> C["info.md：LLM 描述与样例，运行 C 得输出"]
+  A --> D["解析 C：libclang / regex"]
+  B --> E["c2rust 生成静态 hint"]
+  D --> F["按依赖拓扑遍历特征"]
+  F --> G["签名候选生成"]
+  G --> H["函数翻译（结合 callees + hint）"]
+  H --> I["组装 Rust 文件"]
+  I --> J["rustc 编译循环"]
+  J --> K["运行 Rust 样例输出"]
+  K --> L["与 C 输出比对"]
   L -->|不一致| H
-  L -->|一致| M[保存最终 Rust]
-  M --> N[最终 LLM 等价性审查报告]
+  L -->|一致| M["保存最终 Rust"]
+  M --> N["最终 LLM 等价性审查报告"]
 ```
 
 ## 目录与模块说明
@@ -92,15 +92,39 @@ flowchart TD
 - **确定性样例兜底**：LLM info 解析失败也能落地最小样例，保证流水线端到端可运行。
 - **最终等价性审查**：LLM 对 C/Rust 全量代码做独立审阅，输出风险/差异 Markdown 供人工决策。
 
+## 本地部署
+
+- **Ubuntu 22.04 + conda（推荐）**
+  ```bash
+  sudo apt-get update && sudo apt-get install -y build-essential clang-14 llvm-14 lld libclang-14-dev curl
+  curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+  source "$HOME/.cargo/env"
+  cargo install c2rust --locked  # 若已有 c2rust 可跳过
+
+  conda create -n crtrans python=3.10 -y
+  conda activate crtrans
+  pip install -r requirements.txt
+  ```
+  - libclang 缺省从 `/usr/lib/llvm-14/lib/libclang.so.1` 加载，可通过 `LIBCLANG_PATH` 覆盖。
+  - 若系统没有 `clang-14`，可使用 `update-alternatives` 设为默认或调整 `compile_commands.json` 的 `command`。
+
+- **其他环境（无 conda）**
+  - Linux：`python -m venv .venv && source .venv/bin/activate && pip install -r requirements.txt`，系统依赖同上；确保 `clang`/`llvm` 版本与 libclang 路径一致。
+  - macOS：`brew install llvm rustup`，导出 `LIBCLANG_PATH=$(brew --prefix llvm)/lib/libclang.dylib`，其余步骤同上。
+
 ## 使用方法
 
 ```bash
-# 运行一个 C 文件（例：bubble_sort）
-/usr/bin/python transpile.py --c-file C/bubble_sort.c --api-key $DEEPSEEK_KEY
+python transpile.py --c-file C/bubble_sort.c --api-key "$DEEPSEEK_KEY"
 
-# 重要可选环境变量
-# LIBCLANG_PATH  指定自定义 libclang.so 路径
-# ENABLE_LIBCLANG=1 强制使用 libclang（默认自动尝试 14 版路径）
+# 可选 CLI 说明
+# --work-dir <dir>   工作根目录，实际使用 <dir>/<safe_stem>/ 子目录，默认 temp
+# --rust-out <path>  覆盖中间 translated.rs 写入位置（默认在工作子目录）
+# --max-fix-iters 12 最小迭代预算，实际会按文件规模自适应上调（上限 50）
+
+# 环境变量
+# LIBCLANG_PATH=...  指定 libclang 路径
+# ENABLE_LIBCLANG=1  强制使用 libclang（缺省自动探测 14 版路径）
 ```
 
 输出位置：
@@ -113,17 +137,18 @@ flowchart TD
 
 ## 依赖与环境
 
-- Python 3.10+，依赖：`requests`, `clang`。
-- libclang：已内置路径 `/usr/lib/llvm-14/lib/libclang.so(.1)`，可用 `LIBCLANG_PATH` 覆盖。
-- Rust 工具链（rustc 2021 edition），c2rust 已安装。
+- Python 3.10+，按 `requirements.txt` 安装（`requests`, `urllib3`, `clang`）。
+- libclang 14：默认使用 `/usr/lib/llvm-14/lib/libclang.so.1`，可经 `LIBCLANG_PATH` 覆盖。
+- Rust 工具链（2021 edition）与 `c2rust` 可执行需在 `PATH` 中。
 - DeepSeek API key 通过参数或环境变量提供。
 
 ## 局限与后续改进方向
 
 - 复杂跨文件依赖未覆盖；当前假设单文件输入。
-- 样例生成仍依赖 LLM / 简单兜底，未集成符号执行工具。
-- 类型迁移策略可进一步结合运行时反馈做自动签名搜索。
-- 目前修复循环次数固定，可基于编译/比对改进自适应退出策略。
+- 样例生成仍依赖 LLM / 简单兜底，未集成符号执行或模糊测试扩充覆盖。
+- 类型迁移策略可进一步结合运行时反馈做自动签名搜索与指针策略搜索。
+- 迭代预算虽按规模自适应，但仍可能偏保守/偏紧；可引入动态收敛判据和缓存。
+- 输出比对仅覆盖 `info.md` 样例，真实输入空间仍需人工/额外测试验证。
 
 ## 快速回顾
 
