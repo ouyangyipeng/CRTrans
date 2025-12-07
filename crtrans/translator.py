@@ -29,8 +29,10 @@ def translate_function(
     static_hint: str,
     api_key: str | None,
     prompt_file: Path,
+    max_tokens: int | None = None,
 ) -> str:
     prompt = load_prompt(prompt_file)
+    token_budget = max_tokens or _estimate_max_tokens(feature.code)
     messages = [
         {"role": "system", "content": "Translate C to idiomatic safe Rust with minimal unsafe."},
         {
@@ -43,8 +45,8 @@ def translate_function(
             ),
         },
     ]
-    resp = call_deepseek(messages, api_key=api_key, max_tokens=2048)
-    return _strip_code_fence(resp)
+    resp = call_deepseek(messages, api_key=api_key, max_tokens=token_budget)
+    return _extract_rust_code(resp)
 
 
 def assemble_rust(features: List[Feature], translations: Dict[str, str]) -> str:
@@ -65,16 +67,22 @@ def assemble_rust(features: List[Feature], translations: Dict[str, str]) -> str:
     return _dedup_functions(assembled)
 
 
-def _strip_code_fence(text: str) -> str:
-    if text.strip().startswith("```"):
-        lines = text.strip().splitlines()
-        # drop first and last fence lines if present
-        if lines[0].startswith("```"):
-            lines = lines[1:]
-        if lines and lines[-1].startswith("```"):
-            lines = lines[:-1]
-        return "\n".join(lines)
-    return text
+def _extract_rust_code(text: str) -> str:
+    stripped = text.strip()
+    if "```" in stripped:
+        parts = stripped.split("```", 2)
+        if len(parts) >= 3:
+            block = parts[1 if parts[1].strip() else 2].strip()
+            lines = block.splitlines()
+            if lines and lines[0].strip().lower() in {"rust", "rs", "```rust"}:
+                lines = lines[1:]
+            return "\n".join(lines).strip()
+    # Fallback: find the first likely Rust line and return from there
+    lines = stripped.splitlines()
+    for idx, line in enumerate(lines):
+        if line.strip().startswith(("fn ", "pub ", "use ", "#!", "struct ", "enum ")):
+            return "\n".join(lines[idx:]).strip()
+    return stripped
 
 
 def _parse_signatures(resp: str, fallback_name: str) -> List[str]:
@@ -94,6 +102,20 @@ def _parse_signatures(resp: str, fallback_name: str) -> List[str]:
     if not sigs:
         sigs = [f"fn {fallback_name}() {{}}"]
     return sigs[:2]
+
+
+def _estimate_max_tokens(code: str) -> int:
+    # Rough char->token scaling; allow larger budgets for big bodies.
+    approx = 512 + len(code) // 3
+    return max(1500, min(8000, approx))
+
+
+def _strip_code_fence(text: str) -> str:
+    stripped = text.strip()
+    if stripped.startswith("```") and "```" in stripped[3:]:
+        inner = stripped.split("```", 2)[1]
+        return inner.strip()
+    return stripped
 
 
 def _dedup_functions(code: str) -> str:

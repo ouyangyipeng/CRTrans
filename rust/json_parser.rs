@@ -1,8 +1,8 @@
-use std::io::{self, Read};
+use std::io;
 
 fn skipws(s: &str, pos: &mut usize) {
     let bytes = s.as_bytes();
-    while *pos < s.len() && bytes[*pos].is_ascii_whitespace() {
+    while *pos < bytes.len() && bytes[*pos].is_ascii_whitespace() {
         *pos += 1;
     }
 }
@@ -13,107 +13,228 @@ fn print_indent(d: i32) {
     }
 }
 
-fn parse_string(s: &str, pos: &mut usize, _indent: i32) -> bool {
-    *pos += 1; // Skip opening quote
-    let start = *pos;
-    let bytes = s.as_bytes();
+fn parse_string_local(s: &str, pos: &mut usize) -> bool {
+    print!("\"");
+    *pos += 1;
     
-    while *pos < s.len() && bytes[*pos] != b'"' {
-        *pos += 1;
+    while let Some(&c) = s.as_bytes().get(*pos) {
+        if c == b'"' {
+            break;
+        }
+        if c == b'\\' {
+            print!("\\");
+            *pos += 1;
+            if let Some(&c) = s.as_bytes().get(*pos) {
+                print!("{}", c as char);
+            }
+            *pos += 1;
+        } else {
+            print!("{}", c as char);
+            *pos += 1;
+        }
     }
     
-    if *pos < s.len() {
-        print!("\"{}\"", &s[start..*pos]);
-        *pos += 1; // Skip closing quote
-        true
-    } else {
-        false
+    if let Some(&c) = s.as_bytes().get(*pos) {
+        if c == b'"' {
+            print!("\"");
+            *pos += 1;
+            return true;
+        }
     }
+    false
 }
 
-fn parse_number(s: &str, pos: &mut usize, _indent: i32) -> bool {
+fn parse_number_local(s: &str, pos: &mut usize) -> bool {
     let start = *pos;
-    let bytes = s.as_bytes();
     
-    // Handle optional minus sign
-    if bytes[*pos] == b'-' {
-        *pos += 1;
+    if let Some(&c) = s.as_bytes().get(*pos) {
+        if c == b'-' {
+            *pos += 1;
+        }
     }
     
-    // Need at least one digit
-    if *pos >= s.len() || !bytes[*pos].is_ascii_digit() {
+    let mut has_digit = false;
+    while let Some(&c) = s.as_bytes().get(*pos) {
+        if c.is_ascii_digit() {
+            *pos += 1;
+            has_digit = true;
+        } else {
+            break;
+        }
+    }
+    
+    if let Some(&c) = s.as_bytes().get(*pos) {
+        if c == b'.' {
+            *pos += 1;
+            let mut after_decimal = false;
+            while let Some(&c) = s.as_bytes().get(*pos) {
+                if c.is_ascii_digit() {
+                    *pos += 1;
+                    after_decimal = true;
+                } else {
+                    break;
+                }
+            }
+            if !after_decimal {
+                *pos = start;
+                return false;
+            }
+        }
+    }
+    
+    if !has_digit {
         *pos = start;
         return false;
     }
     
-    // Parse integer part
-    while *pos < s.len() && bytes[*pos].is_ascii_digit() {
-        *pos += 1;
-    }
-    
-    // Parse fractional part
-    if *pos < s.len() && bytes[*pos] == b'.' {
-        *pos += 1;
-        if *pos >= s.len() || !bytes[*pos].is_ascii_digit() {
-            *pos = start;
-            return false;
-        }
-        while *pos < s.len() && bytes[*pos].is_ascii_digit() {
-            *pos += 1;
+    for i in start..*pos {
+        if let Some(&c) = s.as_bytes().get(i) {
+            print!("{}", c as char);
         }
     }
-    
-    // Parse exponent part
-    if *pos < s.len() && (bytes[*pos] == b'e' || bytes[*pos] == b'E') {
-        *pos += 1;
-        if *pos < s.len() && (bytes[*pos] == b'+' || bytes[*pos] == b'-') {
-            *pos += 1;
-        }
-        if *pos >= s.len() || !bytes[*pos].is_ascii_digit() {
-            *pos = start;
-            return false;
-        }
-        while *pos < s.len() && bytes[*pos].is_ascii_digit() {
-            *pos += 1;
-        }
-    }
-    
-    print!("{}", &s[start..*pos]);
     true
 }
 
-fn parse_value(s: &str, pos: &mut usize, indent: i32) -> bool {
+fn parse_array_local(s: &str, indent: i32, pos: &mut usize) -> bool {
+    print!("[\n");
+    *pos += 1;
     skipws(s, pos);
     
-    if *pos >= s.len() {
-        return false;
+    let mut first = true;
+    while let Some(&c) = s.as_bytes().get(*pos) {
+        if c == b']' {
+            break;
+        }
+        
+        if !first {
+            print!(",\n");
+        }
+        first = false;
+        
+        print_indent(indent + 2);
+        if !parse_value_local(s, indent + 2, pos) {
+            return false;
+        }
+        skipws(s, pos);
+        
+        if let Some(&c) = s.as_bytes().get(*pos) {
+            if c == b',' {
+                *pos += 1;
+                skipws(s, pos);
+            } else if c != b']' {
+                return false;
+            }
+        }
     }
     
-    let current_char = s.as_bytes()[*pos] as char;
+    if let Some(&c) = s.as_bytes().get(*pos) {
+        if c == b']' {
+            print!("\n");
+            print_indent(indent);
+            print!("]");
+            *pos += 1;
+            return true;
+        }
+    }
+    false
+}
+
+fn parse_object_local(s: &str, indent: i32, pos: &mut usize) -> bool {
+    print!("{{\n");
+    *pos += 1;
+    skipws(s, pos);
     
-    match current_char {
-        '"' => parse_string(s, pos, indent),
-        '{' => parse_object(s, pos, indent),
-        '[' => parse_array(s, pos, indent as usize),
-        _ => {
-            // Check if it's a digit or negative sign
-            let is_digit_or_negative = current_char.is_ascii_digit() || current_char == '-';
-            
-            if is_digit_or_negative {
-                parse_number(s, pos, indent)
+    let mut first = true;
+    while let Some(&c) = s.as_bytes().get(*pos) {
+        if c == b'}' {
+            break;
+        }
+        
+        if !first {
+            print!(",\n");
+        }
+        first = false;
+        
+        print_indent(indent + 2);
+        if let Some(&c) = s.as_bytes().get(*pos) {
+            if c == b'"' {
+                if !parse_string_local(s, pos) {
+                    return false;
+                }
             } else {
-                // Check for true/false/null literals
-                let remaining = &s[*pos..];
-                
-                if remaining.starts_with("true") {
+                return false;
+            }
+        } else {
+            return false;
+        }
+        skipws(s, pos);
+        
+        if let Some(&c) = s.as_bytes().get(*pos) {
+            if c == b':' {
+                *pos += 1;
+            } else {
+                return false;
+            }
+        } else {
+            return false;
+        }
+        skipws(s, pos);
+        
+        print!(": ");
+        if !parse_value_local(s, indent + 2, pos) {
+            return false;
+        }
+        skipws(s, pos);
+        
+        if let Some(&c) = s.as_bytes().get(*pos) {
+            if c == b',' {
+                *pos += 1;
+                skipws(s, pos);
+            } else if c != b'}' {
+                return false;
+            }
+        }
+    }
+    
+    if let Some(&c) = s.as_bytes().get(*pos) {
+        if c == b'}' {
+            print!("\n");
+            print_indent(indent);
+            print!("}}");
+            *pos += 1;
+            return true;
+        }
+    }
+    false
+}
+
+fn parse_value_local(s: &str, indent: i32, pos: &mut usize) -> bool {
+    skipws(s, pos);
+    
+    if let Some(c) = s.as_bytes().get(*pos) {
+        match c {
+            b'"' => {
+                parse_string_local(s, pos)
+            }
+            b'{' => {
+                parse_object_local(s, indent, pos)
+            }
+            b'[' => {
+                parse_array_local(s, indent, pos)
+            }
+            b'-' | b'0'..=b'9' => {
+                parse_number_local(s, pos)
+            }
+            _ => {
+                if *pos + 4 <= s.len() && &s.as_bytes()[*pos..*pos + 4] == b"true" {
                     print!("true");
                     *pos += 4;
                     true
-                } else if remaining.starts_with("false") {
+                } else if *pos + 5 <= s.len() && &s.as_bytes()[*pos..*pos + 5] == b"false" {
                     print!("false");
                     *pos += 5;
                     true
-                } else if remaining.starts_with("null") {
+                } else if *pos + 4 <= s.len() && &s.as_bytes()[*pos..*pos + 4] == b"null" {
                     print!("null");
                     *pos += 4;
                     true
@@ -122,173 +243,28 @@ fn parse_value(s: &str, pos: &mut usize, indent: i32) -> bool {
                 }
             }
         }
-    }
-}
-
-fn parse_array(s: &str, pos: &mut usize, indent: usize) -> bool {
-    *pos += 1;
-    skipws(s, pos);
-    
-    // Check for empty array immediately
-    if *pos < s.len() && s.as_bytes()[*pos] == b']' {
-        *pos += 1;
-        print!("[]");
-        return true;
-    }
-    
-    print!("[\n");
-    
-    let mut first = true;
-    let mut valid = true;
-    
-    while *pos < s.len() && valid {
-        let ch = s.as_bytes()[*pos] as char;
-        if ch == ']' {
-            break;
-        }
-        
-        if !first {
-            print!(",\n");
-        }
-        first = false;
-        
-        print_indent(indent as i32 + 2);
-        valid = parse_value(s, pos, indent as i32 + 2);
-        if !valid {
-            break;
-        }
-        skipws(s, pos);
-        
-        if *pos < s.len() {
-            let ch = s.as_bytes()[*pos] as char;
-            if ch == ',' {
-                *pos += 1;
-                skipws(s, pos);
-                // Check for trailing comma
-                if *pos < s.len() && s.as_bytes()[*pos] == b']' {
-                    valid = false;
-                    break;
-                }
-            }
-        }
-    }
-    
-    if !valid {
-        return false;
-    }
-    
-    if *pos < s.len() && s.as_bytes()[*pos] == b']' {
-        print!("\n");
-        print_indent(indent as i32);
-        print!("]");
-        *pos += 1;
-        true
-    } else {
-        false
-    }
-}
-
-fn parse_object(s: &str, pos: &mut usize, indent: i32) -> bool {
-    *pos += 1;
-    skipws(s, pos);
-    
-    // Check for empty object immediately
-    if *pos < s.len() && s.as_bytes()[*pos] == b'}' {
-        *pos += 1;
-        print!("{{}}");
-        return true;
-    }
-    
-    print!("{{\n");
-    
-    let mut first = true;
-    let mut valid = true;
-    
-    while *pos < s.len() && valid {
-        let ch = s.as_bytes()[*pos] as char;
-        if ch == '}' {
-            break;
-        }
-        
-        if !first {
-            print!(",\n");
-        }
-        first = false;
-        
-        // Parse key
-        print_indent(indent + 2);
-        if ch == '"' {
-            if !parse_string(s, pos, indent + 2) {
-                valid = false;
-                break;
-            }
-        } else {
-            valid = false;
-            break;
-        }
-        
-        skipws(s, pos);
-        
-        // Check for colon
-        if *pos >= s.len() || s.as_bytes()[*pos] != b':' {
-            valid = false;
-            break;
-        }
-        *pos += 1;
-        skipws(s, pos);
-        
-        // Parse value
-        valid = parse_value(s, pos, indent + 2);
-        if !valid {
-            break;
-        }
-        skipws(s, pos);
-        
-        // Check for comma
-        if *pos < s.len() {
-            let ch = s.as_bytes()[*pos] as char;
-            if ch == ',' {
-                *pos += 1;
-                skipws(s, pos);
-                // Check for trailing comma
-                if *pos < s.len() && s.as_bytes()[*pos] == b'}' {
-                    valid = false;
-                    break;
-                }
-            }
-        }
-    }
-    
-    if !valid {
-        return false;
-    }
-    
-    if *pos < s.len() && s.as_bytes()[*pos] == b'}' {
-        print!("\n");
-        print_indent(indent);
-        print!("}}");
-        *pos += 1;
-        true
     } else {
         false
     }
 }
 
 fn main() {
-    let mut input = String::new();
-    io::stdin().read_to_string(&mut input).unwrap();
+    let input = io::stdin()
+        .lines()
+        .map(|line| line.unwrap())
+        .collect::<Vec<String>>()
+        .join("\n");
     
     let mut pos = 0;
-    if !parse_value(&input, &mut pos, 0) {
-        print!("null");
+    if !parse_value_local(&input, 0, &mut pos) {
+        println!("null");
+        return;
     }
     
-    // Skip any trailing whitespace
     skipws(&input, &mut pos);
-    
-    // If we didn't consume entire input, output null
     if pos < input.len() {
-        print!("null");
+        println!("null");
+        return;
     }
     
     println!();

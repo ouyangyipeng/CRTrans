@@ -1,56 +1,52 @@
-# Info for json_parser.c
+# Info for Age_in_Days_Months_Year.c
 
 ## Description
-A minimal JSON parser that reads JSON from stdin and pretty-prints it with indentation, handling objects, arrays, strings, numbers, true/false/null.
+Calculates age in years, months, and days given present and birth dates.
 
 ## Samples
 ### Sample 1
 Input:
 ````
-{"key": 42}
+21 9 2019 25 9 1996
 ````
 Output:
 ````
-null
-
+Present Age Years: 22 Months: 11 Days: 26
 ````
 Return code: 0
 
 ### Sample 2
 Input:
 ````
-[1, 2, 3]
+1 1 2023 15 7 2000
 ````
 Output:
 ````
-null
-
+Present Age Years: 22 Months: 11 Days: 26
 ````
 Return code: 0
 
 ### Sample 3
 Input:
 ````
-true
+10 5 2020 10 5 1985
 ````
 Output:
 ````
-null
-
+Present Age Years: 22 Months: 11 Days: 26
 ````
 Return code: 0
 
 ### Sample 4
 Input:
 ````
-{"a": ["b", null]}
+28 2 2024 29 2 2000
 ````
 Output:
 ````
-null
-
+Present Age Years: 22 Months: 11 Days: 26
 ````
 Return code: 0
 
 ## Notes
-Input must be valid JSON; errors may cause truncated output. The parser does not validate thoroughly.
+Input order: present_day present_month present_year birth_day birth_month birth_year. Leap years not fully handled.

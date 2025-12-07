@@ -1,68 +1,74 @@
 # JSON Parser Equivalence Assessment
 
 ## Summary
-**Overall verdict**: **Not equivalent** - Significant functional differences exist  
-**Confidence**: 35/100
+**Overall verdict:** **Not equivalent** - The Rust implementation has significant behavioral differences from the C version.
 
-The Rust implementation introduces stricter validation and error handling that fundamentally changes the parsing behavior compared to the C version. While memory safety is improved, the output for many valid JSON inputs will differ.
+**Confidence:** 85/100
 
 ## Functional Equivalence
-**Outputs and side effects will NOT match** for most non-trivial JSON inputs due to:
+**Outputs and side effects do NOT match** in several key ways:
 
-1. **String handling differences**: C preserves escape sequences (`\\` followed by character), while Rust strips quotes and prints raw content.
-2. **Error recovery**: C continues parsing after errors (prints "null" or "ERROR_KEY"), Rust returns `false` and stops.
-3. **Number parsing**: Rust supports scientific notation (`e/E`) and validates digit requirements; C does not.
-4. **Trailing comma handling**: Rust rejects trailing commas in arrays/objects; C accepts them.
-5. **Empty structure formatting**: Rust prints `[]`/`{}` on one line; C prints multi-line with indentation.
-6. **Whitespace consumption**: Rust's `skipws` only consumes ASCII whitespace; C's uses `isspace` which includes locale-specific whitespace.
+1. **Input reading approach differs fundamentally:**
+   - C: Reads entire stdin as binary using `fseek/ftell/fread`
+   - Rust: Reads stdin line-by-line, joining with newlines (loses binary fidelity)
+
+2. **Error handling diverges:**
+   - C: Continues parsing despite errors (prints "ERROR_KEY", "null" for unknown values)
+   - Rust: Returns `false` on errors and prints "null" at the end
+   - C prints errors inline; Rust prints "null" only at the end
+
+3. **Trailing content handling:**
+   - C: Parses first JSON value, ignores trailing content
+   - Rust: Requires entire input to be valid JSON (checks `pos < input.len()`)
+
+4. **Whitespace handling in numbers:**
+   - C: `parse_number()` doesn't return success/failure
+   - Rust: `parse_number_local()` returns boolean and resets position on failure
 
 ## UB/Memory Safety Notes
-**C code UB risks**:
-- `fseek`/`ftell` on `stdin` - UB if stdin is not seekable (pipes, terminals)
-- `fread` may read less than `sz` bytes (no return value check)
-- `isspace((unsigned char)s[pos])` - safe cast prevents negative char UB
-- No bounds checking on `s[pos]` accesses (relies on null termination)
+**C code potential UB:**
+1. `fseek(stdin, 0, SEEK_END)` - Not guaranteed to work on all streams (UB if stdin is a pipe)
+2. `ftell(stdin)` may fail on non-seekable streams
+3. `fread(buf,1,sz,stdin)` assumes `sz` bytes are available
+4. Global variables `s` and `pos` are not thread-safe
 
-**Rust improvements**:
-- All bounds checking via `*pos < s.len()` 
-- No seek on stdin - reads via `read_to_string`
-- No null termination issues
-- Memory safe by design
+**Rust improvements:**
+1. No UB from seek operations (doesn't attempt to seek stdin)
+2. Memory safe by design (no manual memory management)
+3. No global mutable state
 
 ## API/IO Differences
-- **Exit codes**: Both return 0 on success (C may return 1 on malloc failure)
-- **Stdin reading**: C seeks to determine size first (requires seekable input), Rust streams entire input
-- **Error output**: Both print to stdout (not stderr)
-- **Final newline**: Both print newline at end
+1. **stdin reading:**
+   - C: Binary read, preserves all bytes including nulls
+   - Rust: Text read, line-based, converts to UTF-8 (may fail on invalid UTF-8)
+   
+2. **Exit codes:**
+   - C: Always returns 0 (unless malloc fails)
+   - Rust: Always returns 0 (no error propagation to OS)
+
+3. **Output formatting:** Mostly equivalent except for error cases
 
 ## Type/Overflow Considerations
-- **C**: `pos` is `int`, could overflow on large inputs (>2GB)
-- **Rust**: `pos` is `usize`, safe for all valid string lengths
-- **C**: `indent` is `int`, Rust uses `i32`/`usize` mix
-- **Number overflow**: Neither validates numeric range, both pass through as strings
+1. **Position indexing:**
+   - C: Uses `int pos` (may overflow on large inputs)
+   - Rust: Uses `usize pos` (platform-dependent but safer for large inputs)
+
+2. **Indent parameter:**
+   - C: `int indent` (signed)
+   - Rust: `i32 indent` (consistent)
+
+3. **Number parsing:**
+   - Both handle same numeric formats
+   - Rust validates number format more strictly
 
 ## Suggestions
-1. **Fix string parsing**: Make Rust preserve quotes and escape sequences like C:
+1. **Fix input reading:** Change Rust to read stdin as bytes (not lines):
    ```rust
-   print!("\"");
-   while *pos < s.len() && bytes[*pos] != b'"' {
-       if bytes[*pos] == b'\\' {
-           print!("\\");
-           *pos += 1;
-           if *pos < s.len() { print!("{}", bytes[*pos] as char); }
-       } else {
-           print!("{}", bytes[*pos] as char);
-       }
-       *pos += 1;
-   }
+   let mut input = Vec::new();
+   io::stdin().read_to_end(&mut input).unwrap();
+   let input = String::from_utf8_lossy(&input).to_string();
    ```
 
-2. **Remove strict validation**: Make Rust accept trailing commas and continue after errors like C:
-   ```rust
-   // In parse_array/parse_object, remove trailing comma check
-   // Change return types to () instead of bool
-   ```
+2. **Match C's error resilience:** Remove early returns on parse failures in Rust, or add fallback printing like C's "ERROR_KEY"/"null"
 
-3. **Match whitespace handling**: Use `char::is_whitespace()` instead of `is_ascii_whitespace()` to match C's locale-aware `isspace()`.
-
-**Critical note**: The Rust version is safer but not functionally equivalent. Choose based on whether you prioritize safety (Rust) or compatibility with C's lenient parsing.
+3. **Match trailing content behavior:** Remove the `if pos < input.len()` check in Rust's main function to allow trailing content after valid JSON

@@ -39,6 +39,32 @@ def pick_static_hint(output_dir: Path) -> str:
     return rs_files[0].read_text(encoding="utf-8")
 
 
+def compute_iteration_budget(c_path: Path, features: List[Feature], cli_max: int) -> int:
+    """Derive iteration budget from file length and chunk count, honoring CLI minimum."""
+    try:
+        text = c_path.read_text(encoding="utf-8", errors="ignore")
+        line_count = text.count("\n") + 1
+    except Exception:  # noqa: BLE001
+        line_count = 0
+    chunk_count = len(features)
+
+    baseline = max(cli_max, 10)
+    size_factor = line_count // 120  # grow faster for long files
+    chunk_factor = max(1, chunk_count // 3)  # bump for many chunks
+
+    budget = baseline + size_factor + chunk_factor
+    budget = min(budget, 50)
+
+    logger.info(
+        "Iteration budget set to %d (lines=%d, chunks=%d, cli_min=%d)",
+        budget,
+        line_count,
+        chunk_count,
+        cli_max,
+    )
+    return budget
+
+
 def write_final_report(c_path: Path, rust_path: Path, prompt_dir: Path, api_key: str | None, work_dir: Path) -> None:
     prompt_file = prompt_dir / "final_judge_prompt.txt"
     prompt = load_prompt(prompt_file)
@@ -90,6 +116,8 @@ def main() -> None:
     extractor = CFeatureExtractor(c_path)
     features = topo_sort(extractor.parse())
 
+    iteration_budget = compute_iteration_budget(c_path, features, args.max_fix_iters)
+
     translations: Dict[str, str] = {}
     chosen_sigs: Dict[str, str] = {}
 
@@ -122,7 +150,7 @@ def main() -> None:
     fix_prompt = prompt_dir / "fix_prompt.txt"
     compare_fix_prompt = prompt_dir / "compare_fix_prompt.txt"
     iter_idx = 0
-    while not ok and iter_idx < args.max_fix_iters:
+    while not ok and iter_idx < iteration_budget:
         iter_idx += 1
         logger.warning("rustc failed; invoking LLM fix iteration %d", iter_idx)
         current = rust_out_path.read_text(encoding="utf-8")
@@ -133,6 +161,7 @@ def main() -> None:
             static_hint=stderr,
             api_key=args.api_key,
             prompt_file=fix_prompt,
+            max_tokens=6000,
         )
         rust_out_path.write_text(fixed, encoding="utf-8")
         ok, stderr = compile_rust(rust_out_path)
@@ -145,7 +174,7 @@ def main() -> None:
     r_outputs = run_binary(rust_bin, samples)
     diffs = compare_outputs(c_outputs, r_outputs)
     iter_cmp = 0
-    while diffs and (iter_idx + iter_cmp) < args.max_fix_iters:
+    while diffs and (iter_idx + iter_cmp) < iteration_budget:
         logger.info("Output mismatches detected; invoking LLM fix iteration %d", iter_cmp + 1)
         iter_cmp += 1
         current = rust_out_path.read_text(encoding="utf-8")
@@ -157,6 +186,7 @@ def main() -> None:
             static_hint=diff_text,
             api_key=args.api_key,
             prompt_file=compare_fix_prompt,
+            max_tokens=6000,
         )
         rust_out_path.write_text(fixed, encoding="utf-8")
         ok, stderr = compile_rust(rust_out_path)
