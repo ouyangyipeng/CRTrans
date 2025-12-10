@@ -24,7 +24,7 @@ def call_deepseek(
     messages: List[Dict[str, str]],
     api_key: str | None = None,
     model: str = DEFAULT_MODEL,
-    temperature: float = 0.0,
+    temperature: float = 0.1,
     max_tokens: int = 2048,
     max_retries: int = 3,
     timeout: float | tuple[float, float] = (20, 240),
